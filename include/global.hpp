@@ -5,6 +5,10 @@
 
 namespace ports {
 
+  // Controllers
+  extern pros::Controller * controllerMain;
+  extern pros::Controller * controllerPartner;
+
   // Motors
   extern pros::Motor * port1;
   extern pros::Motor * port2;
@@ -29,10 +33,10 @@ namespace ports {
   extern pros::Motor * port21;
 
   // Port mapping
-  extern pros::Motor * leftFrontDriveMotor;
-  extern pros::Motor * leftBackDriveMotor;
-  extern pros::Motor * rightFrontDriveMotor;
-  extern pros::Motor * rightBackDriveMotor;
+  extern pros::Motor * frontLeftDrive;
+  extern pros::Motor * backLeftDrive;
+  extern pros::Motor * frontRightDrive;
+  extern pros::Motor * backRightDrive;
   extern pros::Motor * liftMotor;
   extern pros::Motor * intakeMotor;
   extern pros::Motor * indexMotor;

@@ -3,6 +3,10 @@
 // Ports initialization
 namespace ports {
 
+  // Controllers
+  pros::Controller * controllerMain = new pros::Controller(CONTROLLER_MASTER);
+  pros::Controller * controllerPartner = new pros::Controller(CONTROLLER_PARTNER);
+
   // Motors
   pros::Motor * port1 = NULL;
   pros::Motor * port2 = NULL;
@@ -27,10 +31,10 @@ namespace ports {
   pros::Motor * port21 = NULL;
 
   // Port mapping
-  pros::Motor * leftFrontDriveMotor = NULL;
-  pros::Motor * leftBackDriveMotor = NULL;
-  pros::Motor * rightFrontDriveMotor = NULL;
-  pros::Motor * rightBackDriveMotor = NULL;
+  pros::Motor * frontLeftDrive = NULL;
+  pros::Motor * backLeftDrive = NULL;
+  pros::Motor * frontRightDrive = NULL;
+  pros::Motor * backRightDrive = NULL;
   pros::Motor * liftMotor = NULL;
   pros::Motor * intakeMotor = NULL;
   pros::Motor * indexMotor = NULL;

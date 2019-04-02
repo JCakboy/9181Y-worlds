@@ -1,5 +1,21 @@
 #include "main.h"
 
+// Dump ports namespace for ease of use
+using namespace ports;
+
+// Drives the robot based on the given controller
+void drive(pros::Controller * controller) {
+	int movePower = controller->get_analog(STICK_LEFT_Y);
+	int turnPower = controller->get_analog(STICK_LEFT_X);
+	int leftPower = movePower + turnPower;
+	int rightPower = movePower - turnPower;
+	frontLeftDrive->move(leftPower);
+	backLeftDrive->move(leftPower);
+	frontRightDrive->move(rightPower);
+	backRightDrive->move(rightPower);
+}
+
+
 /**
  * Runs the operator control code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
@@ -14,18 +30,10 @@
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	pros::Controller master(pros::E_CONTROLLER_MASTER);
-	pros::Motor left_mtr(1);
-	pros::Motor right_mtr(2);
-	while (true) {
-		pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
-		                 (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
-		                 (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);
-		int left = master.get_analog(ANALOG_LEFT_Y);
-		int right = master.get_analog(ANALOG_RIGHT_Y);
 
-		left_mtr = left;
-		right_mtr = right;
+	while (true) {
+		drive(controllerMain);
+
 		pros::delay(20);
 	}
 }
