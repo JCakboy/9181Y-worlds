@@ -11,6 +11,12 @@ void initialize() {
 
 	// Sets the lift to brake
 	ports::liftMotor->set_brake_mode(BRAKE_BRAKE);
+
+	// Sets the drive to brake
+	ports::frontLeftDrive->set_brake_mode(BRAKE_BRAKE);
+	ports::backLeftDrive->set_brake_mode(BRAKE_BRAKE);
+	ports::frontRightDrive->set_brake_mode(BRAKE_BRAKE);
+	ports::backRightDrive->set_brake_mode(BRAKE_BRAKE);
 }
 
 /**

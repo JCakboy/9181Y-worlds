@@ -35,12 +35,24 @@ void drive(pros::Controller * controller) {
  */
 void opcontrol() {
 
+	// Flag to set when the arm is locked
+	bool armLock = false;
+
 	while (true) {
 		// Drives the robot with the main controller
 		drive(controllerMain);
 
-		// Maps the right joystick to the lift
-		liftMotor->move(controllerMain->get_analog(STICK_RIGHT_Y));
+		// Maps the right joystick to the lift, implementing armLock
+		if (controllerMain->get_analog(STICK_RIGHT_Y) == 0 && armLock)
+      liftMotor->move_absolute(270, 100);
+    else {
+      if (armLock) armLock = false;
+      liftMotor->move(controllerMain->get_analog(STICK_RIGHT_Y));
+    }
+
+		// Lock the arm if Y is pressed
+		if (controllerMain->get_digital(BUTTON_Y))
+			armLock = true;
 
 		// Maps the intake motor to the right triggers
 		intakeMotor->move(limit127(controllerMain->get_digital(BUTTON_R1) * 2 * 127 - controllerMain->get_digital(BUTTON_R1) * 127));
