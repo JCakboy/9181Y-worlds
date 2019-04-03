@@ -1,5 +1,9 @@
 #include "main.h"
 
+#ifndef limit127
+#define limit127(a) (a > 127 ? 127 : (a < -127 ? -127 : a))
+#endif
+
 // Dump ports namespace for ease of use
 using namespace ports;
 
@@ -32,7 +36,14 @@ void drive(pros::Controller * controller) {
 void opcontrol() {
 
 	while (true) {
+		// Drives the robot with the main controller
 		drive(controllerMain);
+
+		// Maps the right joystick to the lift
+		liftMotor->move(controllerMain->get_analog(STICK_RIGHT_Y));
+
+		// Maps the intake motor to the right triggers
+		intakeMotor->move(limit127(controllerMain->get_digital(BUTTON_R1) * 2 * 127 - controllerMain->get_digital(BUTTON_R1) * 127));
 
 		pros::delay(20);
 	}
