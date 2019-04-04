@@ -55,7 +55,7 @@ void opcontrol() {
 			armLock = true;
 
 		// Maps the intake motor to the right triggers
-		intakeMotor->move(limit127(controllerMain->get_digital(BUTTON_R1) * 2 * 127 - controllerMain->get_digital(BUTTON_R1) * 127));
+		intakeMotor->move(limit127(controllerMain->get_digital(BUTTON_R1) * 2 * 127 - controllerMain->get_digital(BUTTON_R2) * 127));
 
 		// Maps the index motor to the bottom left trigger
 		indexMotor->move(controllerMain->get_digital(BUTTON_L2) * 127);
