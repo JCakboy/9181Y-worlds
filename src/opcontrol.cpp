@@ -38,27 +38,36 @@ void opcontrol() {
 	// Flag to set when the arm is locked
 	bool armLock = false;
 
+	// Flog to set when the flywheel is running
+	bool flywheelRunning = false;
+
 	while (true) {
 		// Drives the robot with the main controller
 		drive(controllerMain);
 
 		// Maps the right joystick to the lift, implementing armLock
 		if (controllerMain->get_analog(STICK_RIGHT_Y) == 0 && armLock)
-      liftMotor->move_absolute(270, 100);
+      liftMotor->move_absolute(269, 100);
     else {
       if (armLock) armLock = false;
       liftMotor->move(controllerMain->get_analog(STICK_RIGHT_Y));
     }
 
-		// Lock the arm if Y is pressed
-		if (controllerMain->get_digital(BUTTON_Y))
+		// Lock the arm if A is pressed
+		if (controllerMain->get_digital(BUTTON_A))
 			armLock = true;
 
 		// Maps the intake motor to the right triggers
 		intakeMotor->move(limit127(controllerMain->get_digital(BUTTON_R1) * 2 * 127 - controllerMain->get_digital(BUTTON_R2) * 127));
 
-		// Maps the index motor to the bottom left trigger
-		indexMotor->move(controllerMain->get_digital(BUTTON_L2) * 127);
+		// Maps the index motor to the left triggers
+		indexMotor->move(limit127(controllerMain->get_digital(BUTTON_L1) * 2 * 127 - controllerMain->get_digital(BUTTON_L2) * 127));
+
+		// Toggles the flywheel power when B is pressed
+		if (controllerMain->get_digital_new_press(BUTTON_B)) {
+			flywheelRunning = !flywheelRunning;
+			flywheelMotor->move(flywheelRunning ? 127 : 0);
+		}
 
 		pros::delay(20);
 	}
