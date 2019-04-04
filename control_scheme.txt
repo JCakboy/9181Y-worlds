@@ -1,0 +1,17 @@
+Left stick - Drive
+Right stick - Lift
+
+A - Lift lock
+B - Start/stop flywheel
+X - 
+Y -
+
+Up -
+Down -
+Left -
+Right -
+
+R1 - Intake
+R2 - Outtake
+L1 - Indexer in
+L2 - Indexer out
