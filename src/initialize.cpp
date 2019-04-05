@@ -7,7 +7,7 @@
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
-	pros::lcd::initialize();
+	LCD::initialize(ports::controllerMain, ports::controllerPartner);
 
 	// Sets the lift to brake
 	ports::liftMotor->set_brake_mode(BRAKE_BRAKE);

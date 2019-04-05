@@ -78,6 +78,7 @@ void opcontrol(void);
 //#include <iostream>
 #include "definitions.hpp"
 #include "global.hpp"
+#include "lcd.hpp"
 #include "util.hpp"
 #endif
 
