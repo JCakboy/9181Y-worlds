@@ -80,6 +80,10 @@ void opcontrol() {
 			flywheelMotor->move(flywheelRunning ? 127 : 0);
 		}
 
+		// Maps the left and right buttons on the controller to the left and right buttons on the Brain LCD
+    if (controllerMain->get_digital_new_press(BUTTON_LEFT)) LCD::onLeftButton();
+    if (controllerMain->get_digital_new_press(BUTTON_RIGHT)) LCD::onRightButton();
+
 		pros::delay(20);
 	}
 }
