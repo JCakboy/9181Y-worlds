@@ -46,3 +46,6 @@ namespace ports {
   // ADI (3-wire) ports
 
 }
+
+// Selected autonomous routine
+int selectedAutonomous = 0;

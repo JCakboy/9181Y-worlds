@@ -49,4 +49,7 @@ namespace ports {
 
 }
 
+// Selected autonomous routine
+extern int selectedAutonomous;
+
 #endif

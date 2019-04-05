@@ -48,6 +48,15 @@ class LCD {
     // Returns a line of text on the LCD
     static std::string getText(int line);
 
+    // Returns the name of the selected autnomous
+    static std::string getAutonomousName();
+
+    // Whether the selected autonomous is set for blue side
+    static bool isAutonomousBlue();
+
+    // Whether the selected autonomous is set for red side
+    static bool isAutonomousRed();
+
 };
 
 #endif

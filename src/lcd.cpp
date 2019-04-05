@@ -6,6 +6,32 @@ int LCD::cycles = 0;
 std::string LCD::status = "";
 std::vector<std::string> LCD::lines;
 
+std::string LCD::getAutonomousName() {
+  // Return the selected autonomous name
+  switch (selectedAutonomous) {
+    case 0:
+      return "Skills";
+    case 1:
+      return "Blue Flags";
+    case 2:
+      return "Red Flags";
+    case 3:
+      return "Blue Far";
+    case 4:
+      return "Red Far";
+    default:
+      return (std::to_string(selectedAutonomous) + ((selectedAutonomous % 2 == 0) ? " (Blue)" : " (Red)"));
+  }
+}
+
+bool LCD::isAutonomousBlue() {
+  return (selectedAutonomous % 2 != 0);
+}
+
+bool LCD::isAutonomousRed() {
+  return (selectedAutonomous % 2 == 0);
+}
+
 void LCD::initialize(pros::Controller * controllerMain, pros::Controller * controllerPartner) {
   // Initialize the brain LCD
   pros::lcd::initialize();
@@ -29,14 +55,19 @@ void LCD::initialize(pros::Controller * controllerMain, pros::Controller * contr
 }
 
 void LCD::onLeftButton() {
+  // Decrements the selected autonomous and update the LCD
+  selectedAutonomous--;
   updateScreen(true);
 }
 
 void LCD::onCenterButton() {
+  // No action set
   updateScreen(true);
 }
 
 void LCD::onRightButton() {
+  // Increments the selected autonomous and update the LCD
+  selectedAutonomous++;
   updateScreen(true);
 }
 
@@ -44,11 +75,13 @@ void LCD::updateScreen() {
   updateScreen(false);
 }
 
-
 void LCD::updateScreen(bool forceController) {
+  // Updates the selected autonomous on the LCD
+  setText(0, "Selected autonomous: " + LCD::getAutonomousName());
+
   // Check to see whether the controller should updates its LCD
   if (cycles == 2 || forceController)
-    LCD::setControllerText("");
+    LCD::setControllerText("Auto: " + LCD::getAutonomousName());
   LCD::cycles++;
   if (LCD::cycles > 200 || forceController) LCD::cycles = 0;
 }
