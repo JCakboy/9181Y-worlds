@@ -78,6 +78,7 @@ void opcontrol(void);
 //#include <iostream>
 #include "definitions.hpp"
 #include "global.hpp"
+#include "util.hpp"
 #endif
 
 #endif  // _PROS_MAIN_H_
