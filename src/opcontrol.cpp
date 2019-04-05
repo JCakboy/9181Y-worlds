@@ -9,7 +9,7 @@ void drive(pros::Controller * controller) {
 	int turnPower = controller->get_analog(STICK_LEFT_X);
 
 	// If vision align is requested, take over the turn power
-	if (controller->get_digital(BUTTON_Y)) {
+	if (controller->get_digital(BUTTON_L2) && flagVision != NULL) {
 		// Prepare variables for decision
 		int sigID = LCD::isAutonomousBlue() ? 1 : 2;
 		pros::vision_object_s_t sig = flagVision->get_by_sig(0, sigID);
@@ -17,7 +17,7 @@ void drive(pros::Controller * controller) {
 		// If a signature is detected, lock to it. Otherwise, give control back over to the driver
 		if (middle > -2000)
 			if (util::abs(middle - 158) > 6)
-				turnPower = sig.x_middle_coord > 158 ? 20 : -20;
+				turnPower = middle > 158 ? 27 : -27;
 			else
 				turnPower = 0;
 		else;
@@ -65,21 +65,25 @@ void opcontrol() {
       liftMotor->move(controllerMain->get_analog(STICK_RIGHT_Y));
     }
 
-		// Lock the arm if A is pressed
+		// Lock the lift if A is pressed
 		if (controllerMain->get_digital(BUTTON_A))
 			armLock = true;
 
 		// Maps the intake motor to the right triggers
 		intakeMotor->move(util::limit127((double) controllerMain->get_digital(BUTTON_R1) * 2 * 127 - controllerMain->get_digital(BUTTON_R2) * 127));
 
-		// Maps the index motor to the left triggers
-		indexMotor->move(util::limit127((double) controllerMain->get_digital(BUTTON_L1) * 2 * 127 - controllerMain->get_digital(BUTTON_L2) * 127));
+		// Maps the index motor forward to the high left trigger and backward to B
+		indexMotor->move(util::limit127((double) controllerMain->get_digital(BUTTON_L1) * 2 * 127 - controllerMain->get_digital(BUTTON_B) * 127));
 
-		// Toggles the flywheel power when B is pressed
-		if (controllerMain->get_digital_new_press(BUTTON_B)) {
+		// Toggles the flywheel power when X is pressed
+		if (controllerMain->get_digital_new_press(BUTTON_X)) {
 			flywheelRunning = !flywheelRunning;
 			flywheelMotor->move(flywheelRunning ? 127 : 0);
 		}
+
+		// If down is pressed, reset the lift
+		if (controllerMain->get_digital_new_press(BUTTON_DOWN))
+			liftMotor->tare_position();
 
 		// Maps the left and right buttons on the controller to the left and right buttons on the Brain LCD
     if (controllerMain->get_digital_new_press(BUTTON_LEFT)) LCD::onLeftButton();

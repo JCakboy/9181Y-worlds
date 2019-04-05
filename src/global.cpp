@@ -41,7 +41,7 @@ namespace ports {
   pros::Motor * flywheelMotor = port8;
 
   // Vision
-  pros::Vision * flagVision = NULL;
+  pros::Vision * flagVision = new pros::Vision(5);
 
   // ADI (3-wire) ports
 
