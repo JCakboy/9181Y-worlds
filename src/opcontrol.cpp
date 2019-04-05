@@ -1,9 +1,5 @@
 #include "main.h"
 
-#ifndef limit127
-#define limit127(a) (a > 127 ? 127 : (a < -127 ? -127 : a))
-#endif
-
 // Dump ports namespace for ease of use
 using namespace ports;
 
@@ -14,12 +10,17 @@ void drive(pros::Controller * controller) {
 
 	// If vision align is requested, take over the turn power
 	if (controller->get_digital(BUTTON_Y)) {
-		pros::vision_object_s_t sig = flagVision->get_by_sig(0, 1);
+		// Prepare variables for decision
+		int sigID = LCD::isAutonomousBlue() ? 1 : 2;
+		pros::vision_object_s_t sig = flagVision->get_by_sig(0, sigID);
 		int middle = util::sign(sig.x_middle_coord);
-		if (middle > -2000 && util::abs(middle - 158) > 6)
-			turnPower = sig.x_middle_coord > 158 ? 20 : -20;
-		else
-			turnPower = 0;
+		// If a signature is detected, lock to it. Otherwise, give control back over to the driver
+		if (middle > -2000)
+			if (util::abs(middle - 158) > 6)
+				turnPower = sig.x_middle_coord > 158 ? 20 : -20;
+			else
+				turnPower = 0;
+		else;
 	}
 
 	int leftPower = movePower + turnPower;
@@ -69,10 +70,10 @@ void opcontrol() {
 			armLock = true;
 
 		// Maps the intake motor to the right triggers
-		intakeMotor->move(limit127(controllerMain->get_digital(BUTTON_R1) * 2 * 127 - controllerMain->get_digital(BUTTON_R2) * 127));
+		intakeMotor->move(util::limit127((double) controllerMain->get_digital(BUTTON_R1) * 2 * 127 - controllerMain->get_digital(BUTTON_R2) * 127));
 
 		// Maps the index motor to the left triggers
-		indexMotor->move(limit127(controllerMain->get_digital(BUTTON_L1) * 2 * 127 - controllerMain->get_digital(BUTTON_L2) * 127));
+		indexMotor->move(util::limit127((double) controllerMain->get_digital(BUTTON_L1) * 2 * 127 - controllerMain->get_digital(BUTTON_L2) * 127));
 
 		// Toggles the flywheel power when B is pressed
 		if (controllerMain->get_digital_new_press(BUTTON_B)) {
