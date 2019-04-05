@@ -11,6 +11,17 @@ using namespace ports;
 void drive(pros::Controller * controller) {
 	int movePower = controller->get_analog(STICK_LEFT_Y);
 	int turnPower = controller->get_analog(STICK_LEFT_X);
+
+	// If vision align is requested, take over the turn power
+	if (controller->get_digital(BUTTON_Y)) {
+		pros::vision_object_s_t sig = flagVision->get_by_sig(0, 1);
+		int middle = util::sign(sig.x_middle_coord);
+		if (middle > -2000 && util::abs(middle - 158) > 6)
+			turnPower = sig.x_middle_coord > 158 ? 20 : -20;
+		else
+			turnPower = 0;
+	}
+
 	int leftPower = movePower + turnPower;
 	int rightPower = movePower - turnPower;
 	frontLeftDrive->move(leftPower);
