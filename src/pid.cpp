@@ -63,8 +63,8 @@ void PID::driveStraight(int power) {
     powerRight = power - (error * kp);
   }
 
-  checkPower(powerLeft);
-  checkPower(powerRight);
+  powerLeft = checkPower(powerLeft);
+  powerRight = checkPower(powerRight);
 
   frontLeftDrive->move(powerLeft);
   frontRightDrive->move(powerRight);
