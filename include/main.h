@@ -80,6 +80,7 @@ void opcontrol(void);
 #include "global.hpp"
 #include "lcd.hpp"
 #include "util.hpp"
+#include "pid.hpp"
 #endif
 
 #endif  // _PROS_MAIN_H_
