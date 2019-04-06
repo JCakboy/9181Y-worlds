@@ -20,7 +20,7 @@ std::string LCD::getAutonomousName() {
     case 4:
       return "Red Far";
     default:
-      return (std::to_string(selectedAutonomous) + ((selectedAutonomous % 2 == 0) ? " (Blue)" : " (Red)"));
+      return (std::to_string(selectedAutonomous) + (isAutonomousRed() ? " (Red)" : " (Blue)"));
   }
 }
 
