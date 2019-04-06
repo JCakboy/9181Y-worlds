@@ -42,6 +42,7 @@ namespace ports {
 
   // Vision
   pros::Vision * flagVision = new pros::Vision(5);
+  pros::Vision * capVision = new pros::Vision(6);
 
   // ADI (3-wire) ports
 

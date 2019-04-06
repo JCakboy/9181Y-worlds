@@ -168,11 +168,11 @@
             "-fdiagnostics-color",
             "--std=gnu++17",
             "-o",
-            "bin/global.cpp.o",
-            "src\\global.cpp"
+            "bin/opcontrol.cpp.o",
+            "src\\opcontrol.cpp"
         ],
         "directory": "C:\\Users\\Chester\\Git Projects\\9181Y-worlds",
-        "file": "src\\global.cpp"
+        "file": "src\\opcontrol.cpp"
     },
     {
         "arguments": [
@@ -203,10 +203,10 @@
             "-fdiagnostics-color",
             "--std=gnu++17",
             "-o",
-            "bin/opcontrol.cpp.o",
-            "src\\opcontrol.cpp"
+            "bin/global.cpp.o",
+            "src\\global.cpp"
         ],
         "directory": "C:\\Users\\Chester\\Git Projects\\9181Y-worlds",
-        "file": "src\\opcontrol.cpp"
+        "file": "src\\global.cpp"
     }
 ]
