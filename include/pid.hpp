@@ -5,18 +5,42 @@
 
 class PID {
 
-  double wheelDiameter = 4; //in inches
-  double wheelCircumference = PI * wheelDiameter;
+  // Power restraints
   const int MAX_POWER = 90;
   const int MIN_POWER = 20;
 
-public:
+  // PID values
+  double movekp;
+  double movekd;
+  double straightkp;
+  double pivotkp;
+  double pivotkd;
+
+  // Calculates and returns the gear ratio for the drive
+  static double getGearRatio();
+
+  // Sets the brake mode
   void setBrakeMode();
+  // Resets the motor encoders
   void resetEncoders();
+  // Returns the power given the minimum and maximum power restraints
   int checkPower(int power);
+  // Ensures the robot drives straight
   void driveStraight(int power);
-  void distancePID(int targetDistance);
-  void pivotPID(int targetDegree);
+public:
+  // Constructs the PID object
+  PID();
+
+  // Sets the move PID values
+  void setMovePID(double movekp, double movekd, double straightkp);
+  // Sets the pivot PID values
+  void setPivotPID(double pivotkp, double pivotkd);
+
+  // Moves the robot the given amount of inches to the desired location
+  void move(double inches);
+  // Pivots the robot the given amount of degrees
+  void pivot(double degrees);
+
 };
 
 #endif
