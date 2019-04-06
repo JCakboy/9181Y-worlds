@@ -9,21 +9,26 @@ void drive(pros::Controller * controller) {
 	int turnPower = controller->get_analog(STICK_LEFT_X);
 
 	// If vision align is requested, take over the turn power
-	if (controller->get_digital(BUTTON_L2) && flagVision != NULL) {
-		// Prepare variables for decision
-		int sigID = LCD::isAutonomousBlue() ? 1 : 2;
-		pros::vision_object_s_t sig = flagVision->get_by_sig(0, sigID);
-		int middle = util::sign(sig.x_middle_coord);
-		int diff = middle - 158;
-		// If a signature is detected, lock to it. Otherwise, give control back over to the driver
-		if (middle > -2000)
-			if (util::abs(diff) > 6)
-				turnPower = middle > 158 ?
-												diff / 3 + 10:
-												diff / 3 - 10;
-			else
-				turnPower = 0;
-		else;
+	if (controller->get_digital(BUTTON_L2)) {
+		// If the flywheel is running, align with the flags. Otherwise, align with caps
+		pros::Vision * sensor = flywheelRunning ? flagVision : capVision;
+		if (sensor != NULL) {
+			// Prepare variables for decision
+			int sigID = LCD::isAutonomousBlue() ? 1 : 2;
+			pros::vision_object_s_t sig = sensor->get_by_sig(0, sigID);
+			int sensMiddle = VISION_FOV_WIDTH / 2;
+			int middle = util::sign(sig.x_middle_coord);
+			int diff = middle - sensMiddle;
+			// If a signature is detected, lock to it. Otherwise, give control back over to the driver
+			if (middle > -2000)
+				if (util::abs(diff) > 6)
+					turnPower = middle > sensMiddle ?
+													diff / 3 + 10:
+													diff / 3 - 10;
+				else
+					turnPower = 0;
+			else;
+		}
 	}
 
 	int leftPower = movePower + turnPower;
