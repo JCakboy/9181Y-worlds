@@ -45,6 +45,10 @@ namespace ports {
 
   // ADI (3-wire) ports
   pros::ADIGyro * gyro1 = NULL; // To be initilized during the initialization routine for calibration. Port A
+
+  // PID manager
+  PID * pid = new PID();
+  
 }
 
 // Selected autonomous routine

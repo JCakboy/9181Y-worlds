@@ -10,11 +10,11 @@ class PID {
   const int MIN_POWER = 20;
 
   // PID values
-  double movekp;
-  double movekd;
-  double straightkp;
-  double pivotkp;
-  double pivotkd;
+  double movekp = 0;
+  double movekd = 0;
+  double straightkp = 0;
+  double pivotkp = 0;
+  double pivotkd = 0;
 
   // Calculates and returns the gear ratio for the drive
   static double getGearRatio();

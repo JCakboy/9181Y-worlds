@@ -133,11 +133,11 @@
             "-fdiagnostics-color",
             "--std=gnu++17",
             "-o",
-            "bin/initialize.cpp.o",
-            "src\\initialize.cpp"
+            "bin/lcd.cpp.o",
+            "src\\lcd.cpp"
         ],
         "directory": "C:\\Users\\Chester\\Git Projects\\9181Y-worlds",
-        "file": "src\\initialize.cpp"
+        "file": "src\\lcd.cpp"
     },
     {
         "arguments": [
@@ -203,11 +203,11 @@
             "-fdiagnostics-color",
             "--std=gnu++17",
             "-o",
-            "bin/lcd.cpp.o",
-            "src\\lcd.cpp"
+            "bin/initialize.cpp.o",
+            "src\\initialize.cpp"
         ],
         "directory": "C:\\Users\\Chester\\Git Projects\\9181Y-worlds",
-        "file": "src\\lcd.cpp"
+        "file": "src\\initialize.cpp"
     },
     {
         "arguments": [

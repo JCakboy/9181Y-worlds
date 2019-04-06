@@ -25,6 +25,10 @@ void initialize() {
 	ports::backLeftDrive->set_brake_mode(BRAKE_BRAKE);
 	ports::frontRightDrive->set_brake_mode(BRAKE_BRAKE);
 	ports::backRightDrive->set_brake_mode(BRAKE_BRAKE);
+
+	// Sets the PID values
+	ports::pid->setMovePID(1, 1, 1);
+	ports::pid->setPivotPID(1, 1);
 }
 
 /**

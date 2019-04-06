@@ -3,6 +3,22 @@
 // Dump ports namespace for ease of use
 using namespace ports;
 
+// Create the default constructor
+PID::PID() = default;
+
+// Sets the move PID values
+void PID::setMovePID(double movekp, double movekd, double straightkp) {
+  PID::movekp = movekp;
+  PID::movekd = movekd;
+  PID::straightkp = straightkp;
+}
+
+// Sets the pivot PID values
+void PID::setPivotPID(double pivotkp, double pivotkd) {
+  PID::pivotkp = pivotkp;
+  PID::pivotkd = pivotkd;
+}
+
 // Returns the calculated full gear ratio
 double PID::getGearRatio() {
   double in = 1;

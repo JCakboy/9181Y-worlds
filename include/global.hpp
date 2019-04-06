@@ -47,6 +47,10 @@ namespace ports {
 
   // ADI (3-wire) ports
   extern pros::ADIGyro * gyro1;
+
+  // PID manager
+  extern PID * pid;
+  
 }
 
 // Selected autonomous routine
