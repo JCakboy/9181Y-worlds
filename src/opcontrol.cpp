@@ -49,28 +49,24 @@ void drive(pros::Controller * controller) {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-
-	// Flag to set when the arm is locked
-	bool armLock = false;
-
-	// Flog to set when the flywheel is running
-	bool flywheelRunning = false;
+	// Sets the status on the LCD
+	LCD::setStatus("Operator Control");
 
 	while (true) {
 		// Drives the robot with the main controller
 		drive(controllerMain);
 
-		// Maps the right joystick to the lift, implementing armLock
-		if (controllerMain->get_analog(STICK_RIGHT_Y) == 0 && armLock)
+		// Maps the right joystick to the lift, implementing liftLock
+		if (controllerMain->get_analog(STICK_RIGHT_Y) == 0 && liftLock)
       liftMotor->move_absolute(269, 100);
     else {
-      if (armLock) armLock = false;
+      if (liftLock) liftLock = false;
       liftMotor->move(controllerMain->get_analog(STICK_RIGHT_Y));
     }
 
 		// Lock the lift if A is pressed
 		if (controllerMain->get_digital(BUTTON_A))
-			armLock = true;
+			liftLock = true;
 
 		// Maps the intake motor to the right triggers
 		intakeMotor->move(util::limit127((double) controllerMain->get_digital(BUTTON_R1) * 2 * 127 - controllerMain->get_digital(BUTTON_R2) * 127));
@@ -81,7 +77,7 @@ void opcontrol() {
 		// Toggles the flywheel power when X is pressed
 		if (controllerMain->get_digital_new_press(BUTTON_X)) {
 			flywheelRunning = !flywheelRunning;
-			flywheelMotor->move(flywheelRunning ? 127 : 0);
+			flywheelMotor->move(flywheelRunning * 127);
 		}
 
 		// If down is pressed, reset the lift

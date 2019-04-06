@@ -49,3 +49,9 @@ namespace ports {
 
 // Selected autonomous routine
 int selectedAutonomous = 0;
+
+// Flag to set when the flywheel is running
+bool flywheelRunning = false;
+
+// Flag to set when the lift is locked
+bool liftLock = false;
