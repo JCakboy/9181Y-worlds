@@ -16,8 +16,8 @@ void PID::resetEncoders() {
   backRightDrive->tare_position();
 }
 
+//check if power is within max/min constraints
 int PID::checkPower(int power) {
-  //check if power is within the positive value ranges
   if(power > 0) {
     if(power > MAX_POWER) {
       power = MAX_POWER;
@@ -26,7 +26,6 @@ int PID::checkPower(int power) {
       power = MIN_POWER;
     }
   }
-  //check if power is within the negative value ranges
   else if(power < 0) {
     if(power < -MAX_POWER) {
       power = -MAX_POWER;
@@ -100,7 +99,7 @@ void PID::distancePID(int targetDistance) {
     derivative = error - lastError;
     lastError = error;
 
-    //determine power and check to make sure the power is within constraints
+    //determine power and checks if power is within constraints
     power = (error * kp) + (derivative * kd);
     power = checkPower(power);
 
@@ -109,26 +108,32 @@ void PID::distancePID(int targetDistance) {
   }
 }
 
-void PID::pivotPID(int targetDegree) {
+//PID to make sure the robot pivots to the correct degree
+void PID::pivotPID(int targetBearing) {
   int kp = 0;
   int kd = 0;
-  int currentDegree = 0;
+  int currentBearing = gyro->get_value();
   int error = 30;
   int derivative = 0;
   int lastError = 0;
   int power = 0;
 
-  targetDegree = (targetDegree * 10)  + gyro->get_value();
+  /*converts targetBearing to a 10th of a degree.
+    gyro is never reset, so currentBearing is added to targetBearing*/
+  targetBearing = (targetBearing * 10)  + currentBearing;
 
   while(error != 0) {
-    currentDegree = gyro->get_value();
-    error = targetDegree - currentDegree;
+    currentBearing = gyro->get_value();
+    //calculates difference from targetBearing
+    error = targetBearing - currentBearing;
     derivative  = error - lastError;
     lastError = error;
 
+    //determines power and checks if power is within constraints
     power = (error * kp) + (derivative  * kd);
     power = checkPower(power);
 
+    //powers drive motors to pivot
     frontLeftDrive->move(power);
     backLeftDrive->move(power);
     frontRightDrive->move(-power);
