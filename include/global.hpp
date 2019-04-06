@@ -46,7 +46,7 @@ namespace ports {
   extern pros::Vision * flagVision;
 
   // ADI (3-wire) ports
-  extern pros::ADIGyro * gyro;
+  extern pros::ADIGyro * gyro1;
 }
 
 // Selected autonomous routine

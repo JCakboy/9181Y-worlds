@@ -51,7 +51,7 @@ void LCD::initialize(pros::Controller * controllerMain, pros::Controller * contr
 
   // Signal the commpletion of initialization and update the screen
   LCD::setStatus("LCD initialized");
-  updateScreen();
+  updateScreen(true);
 }
 
 void LCD::onLeftButton() {

@@ -44,7 +44,7 @@ namespace ports {
   pros::Vision * flagVision = new pros::Vision(5);
 
   // ADI (3-wire) ports
-  pros::ADIGyro * gyro = new pros::ADIGyro(21); //THE PORT FOR GYRO IS NOT CONFIRMED YET
+  pros::ADIGyro * gyro1 = NULL; // To be initilized during the initialization routine for calibration. Port A
 }
 
 // Selected autonomous routine

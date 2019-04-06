@@ -112,7 +112,7 @@ void PID::distancePID(int targetDistance) {
 void PID::pivotPID(int targetBearing) {
   int kp = 0;
   int kd = 0;
-  int currentBearing = gyro->get_value();
+  int currentBearing = gyro1->get_value();
   int error = 30;
   int derivative = 0;
   int lastError = 0;
@@ -123,7 +123,7 @@ void PID::pivotPID(int targetBearing) {
   targetBearing = (targetBearing * 10)  + currentBearing;
 
   while(error != 0) {
-    currentBearing = gyro->get_value();
+    currentBearing = gyro1->get_value();
     //calculates difference from targetBearing
     error = targetBearing - currentBearing;
     derivative  = error - lastError;
