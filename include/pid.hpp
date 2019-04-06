@@ -16,6 +16,7 @@ public:
   int checkPower(int power);
   void driveStraight(int power);
   void distancePID(int targetDistance);
+  void pivotPID(int targetDegree);
 };
 
 #endif

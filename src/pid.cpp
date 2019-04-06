@@ -73,8 +73,8 @@ void PID::driveStraight(int power) {
   powerRight = checkPower(powerRight);
 
   frontLeftDrive->move(powerLeft);
-  frontRightDrive->move(powerRight);
   backLeftDrive->move(powerLeft);
+  frontRightDrive->move(powerRight);
   backRightDrive->move(powerRight);
 }
 
@@ -86,7 +86,7 @@ void PID::distancePID(int targetDistance) {
   int error = 30;
   int derivative = 0;
   int lastError = 0;
-  int power = 20;
+  int power = 0;
   //convert targetDistance from inches to degrees
   targetDistance = targetDistance / wheelCircumference * 360;
 
@@ -105,6 +105,35 @@ void PID::distancePID(int targetDistance) {
     power = checkPower(power);
 
     driveStraight(power);
+    pros::delay(20);
+  }
+}
+
+void PID::pivotPID(int targetDegree) {
+  int kp = 0;
+  int kd = 0;
+  int currentDegree = 0;
+  int error = 30;
+  int derivative = 0;
+  int lastError = 0;
+  int power = 0;
+
+  targetDegree = (targetDegree * 10)  + gyro->get_value();
+
+  while(error != 0) {
+    currentDegree = gyro->get_value();
+    error = targetDegree - currentDegree;
+    derivative  = error - lastError;
+    lastError = error;
+
+    power = (error * kp) + (derivative  * kd);
+    power = checkPower(power);
+
+    frontLeftDrive->move(power);
+    backLeftDrive->move(power);
+    frontRightDrive->move(-power);
+    backRightDrive->move(-power);
+
     pros::delay(20);
   }
 }
