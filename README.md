@@ -23,6 +23,6 @@ This projects utilizes PROS hot/cold image linking to support wireless uploading
 
 Most source files are included in the **cold** library, thus not needing reoccurring uploads to the v5 Brain. The following files are the **hot** files and will need to be uploaded each time:
 
- - src/initilize.cpp
- - src/autonomous.cpp
- - src/opcontrol.cpp
+ - `src/initilize.cpp`
+ - `src/autonomous.cpp`
+ - `src/opcontrol.cpp`
