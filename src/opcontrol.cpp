@@ -10,20 +10,38 @@ void drive(pros::Controller * controller) {
 
 	// If vision align is requested, take over the turn power
 	if (controller->get_digital(BUTTON_L2) && flagVision != NULL) {
-		// Prepare variables for decision
+		// Vision focus values
+		int xfocus = VISION_FOV_WIDTH / 2;
+		int yfocus = 30;
+
+		// Prepare variables
+		pros::vision_object_s_t sigs[5];
 		int sigID = LCD::isAutonomousBlue() ? 1 : 2;
-		pros::vision_object_s_t sig = flagVision->get_by_sig(0, sigID);
-		int middle = util::sign(sig.x_middle_coord);
-		int diff = middle - 158;
-		// If a signature is detected, lock to it. Otherwise, give control back over to the driver
-		if (middle > -2000)
-			if (util::abs(diff) > 6)
-				turnPower = middle > 158 ?
-												diff / 3 + 10:
-												diff / 3 - 10;
+
+		// Read the signature
+		flagVision->read_by_sig(0, sigID, 5, sigs);
+
+		// Retrieve the largest signature for horizontal alignment
+		pros::vision_object_s_t xsig = sigs[0];
+		int xmid = util::sign(xsig.x_middle_coord);
+		int xdiff = xmid - xfocus;
+
+		// If a signature is detected, align to it. Otherwise, give control back over to the driver
+		if (xmid > -2000) {
+			if (util::abs(xdiff) > 6)
+				turnPower = xdiff / 3 + 10 * util::abs(xdiff) / xdiff;
 			else
 				turnPower = 0;
-		else;
+			// If the flywheel is about to shoot, align the robot with distance
+			if (flywheelRunning && controller->get_digital_new_press(BUTTON_L1)) {
+				// Calculates the y position of the highest signature
+				int ytop = VISION_FOV_HEIGHT;
+				for (const auto & sig : sigs)
+					ytop = ytop < util::sign(sig.y_middle_coord) ? util::sign(sig.y_middle_coord) : ytop;
+				movePower = 3 * (ytop - yfocus);
+			} else
+				movePower = 0;
+			}
 	}
 
 	int leftPower = movePower + turnPower;
