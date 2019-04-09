@@ -49,6 +49,8 @@ void drive(pros::Controller * controller) {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
+	// Sets the status on the LCD
+	LCD::setStatus("Operator Control");
 
 	// Flag to set when the arm is locked
 	bool armLock = false;
@@ -67,6 +69,9 @@ void opcontrol() {
       if (armLock) armLock = false;
       liftMotor->move(controllerMain->get_analog(STICK_RIGHT_Y));
     }
+
+		// DEBUG - display gyroscope value on the LCD
+		LCD::setText(3, std::to_string(gyro1->get_value()));
 
 		// Lock the lift if A is pressed
 		if (controllerMain->get_digital(BUTTON_A))
