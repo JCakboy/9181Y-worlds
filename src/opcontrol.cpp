@@ -18,9 +18,7 @@ void drive(pros::Controller * controller) {
 		// If a signature is detected, lock to it. Otherwise, give control back over to the driver
 		if (middle > -2000)
 			if (util::abs(diff) > 6)
-				turnPower = middle > 158 ?
-												diff / 3 + 10:
-												diff / 3 - 10;
+				turnPower = diff / 3 + 10 * util::abs(diff) / diff;
 			else
 				turnPower = 0;
 		else;
