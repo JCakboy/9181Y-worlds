@@ -44,11 +44,11 @@ namespace ports {
   pros::Vision * flagVision = new pros::Vision(5);
 
   // ADI (3-wire) ports
-  pros::ADIGyro * gyro1 = NULL; // To be initilized during the initialization routine for calibration. Port A
+  pros::ADIGyro * gyro1 = NULL; // To be initilized during the initialization routine for calibration. Port B
 
   // PID manager
   PID * pid = new PID();
-  
+
 }
 
 // Selected autonomous routine
