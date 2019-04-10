@@ -52,6 +52,13 @@ int PID::checkPower(int power) {
   return power;
 }
 
+void powerDrive(int powerLeft, int powerRight) {
+  frontLeftDrive->move(powerLeft);
+  backLeftDrive->move(powerLeft);
+  frontRightDrive->move(powerRight);
+  backRightDrive->move(powerRight);
+}
+
 // Ensures the robot drives straight
 void PID::driveStraight(int power) {
   double kp = straightkp;
@@ -87,10 +94,7 @@ void PID::driveStraight(int power) {
   powerRight = checkPower(powerRight);
 
   // Issue the power to the motors
-  frontLeftDrive->move(powerLeft);
-  backLeftDrive->move(powerLeft);
-  frontRightDrive->move(powerRight);
-  backRightDrive->move(powerRight);
+  powerDrive(powerLeft, powerRight);
 }
 
 // Moves the robot the given amount of inches to the desired location
@@ -101,13 +105,20 @@ void PID::move(double inches) {
   double error = 1;
   double derivative = 0;
   double lastError = 0;
-  int power = 0;
+  int power = 5;
 
   //convert targetDistance from inches to degrees
   double targetDistance = inches * getGearRatio();
 
   setBrakeMode();
   resetEncoders();
+
+
+  for(int i = 0; i < MAX_POWER - 50; i++) {
+    power *= 1.5;
+    powerDrive(power, power);
+    pros::delay(20);
+  }
 
   while (error != 0) {
     currentDistance = (frontRightDrive->get_position() + frontLeftDrive->get_position()) / 2;
@@ -140,7 +151,7 @@ void PID::pivot(double degrees) {
      Gyro is never reset, so currentBearing is added to targetBearing */
   double targetBearing = (targetBearing * 10.0)  + currentBearing;
 
-  while (error != 0) {
+  while (true) {
     currentBearing = gyro1->get_value();
     // Calculates difference from targetBearing
     error = targetBearing - currentBearing;
@@ -152,11 +163,7 @@ void PID::pivot(double degrees) {
     power = checkPower(power);
 
     // Powers drive motors to pivot
-    frontLeftDrive->move(power);
-    backLeftDrive->move(power);
-    frontRightDrive->move(-power);
-    backRightDrive->move(-power);
-
+    powerDrive(power, -power);
     pros::delay(20);
   }
 }

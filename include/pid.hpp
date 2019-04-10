@@ -4,9 +4,9 @@
 #include "main.h"
 
 class PID {
-
+friend void ::opcontrol();
   // Power restraints
-  const int MAX_POWER = 90;
+  const int MAX_POWER = 120;
   const int MIN_POWER = 20;
 
   // PID values
@@ -27,6 +27,7 @@ class PID {
   int checkPower(int power);
   // Ensures the robot drives straight
   void driveStraight(int power);
+  void powerDrive(int powerLeft, int powerRight);
 public:
   // Constructs the PID object
   PID();

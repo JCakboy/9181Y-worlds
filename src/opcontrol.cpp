@@ -93,6 +93,19 @@ void opcontrol() {
 		if (controllerMain->get_digital_new_press(BUTTON_DOWN))
 			liftMotor->tare_position();
 
+		if (selectedAutonomous == 1) {
+			selectedAutonomous = 0;
+			pid->resetEncoders();
+			while (frontLeftDrive->get_position() < 720*3) {
+				pid->driveStraight(120);
+				pros::delay(20);
+			}
+
+		} else if (selectedAutonomous == -1) {
+			selectedAutonomous = 0;
+			pid->move(40);
+		}
+
 		// Maps the left and right buttons on the controller to the left and right buttons on the Brain LCD
     if (controllerMain->get_digital_new_press(BUTTON_LEFT)) LCD::onLeftButton();
     if (controllerMain->get_digital_new_press(BUTTON_RIGHT)) LCD::onRightButton();
