@@ -70,8 +70,11 @@ void opcontrol() {
       liftMotor->move(controllerMain->get_analog(STICK_RIGHT_Y));
     }
 
-		// DEBUG - display gyroscope value on the LCD
-		LCD::setText(3, std::to_string(gyro1->get_value()));
+		// DEBUG - sensor values
+		LCD::setText(2, std::to_string(gyro1->get_value()));
+		LCD::setText(3, std::to_string(gyro2->get_value()));
+		LCD::setText(4, std::to_string(backLeftUltrasonic->get_value()));
+		LCD::setText(5, std::to_string(backRightUltrasonic->get_value()));
 
 		// Lock the lift if A is pressed
 		if (controllerMain->get_digital(BUTTON_A))
@@ -105,10 +108,6 @@ void opcontrol() {
 			selectedAutonomous = 0;
 			pid->move(40);
 		}
-
-		// DEBUG: Ultrasonic values
-		LCD::setText(4, std::to_string(backLeftUltrasonic->get_value()));
-		LCD::setText(5, std::to_string(backRightUltrasonic->get_value()));
 
 		// Maps the left and right buttons on the controller to the left and right buttons on the Brain LCD
     if (controllerMain->get_digital_new_press(BUTTON_LEFT)) LCD::onLeftButton();

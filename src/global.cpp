@@ -44,9 +44,10 @@ namespace ports {
   pros::Vision * flagVision = new pros::Vision(5);
 
   // ADI (3-wire) ports
-  pros::ADIGyro * gyro1 = NULL; // To be initilized during the initialization routine for calibration. Port B
-  pros::ADIUltrasonic * backLeftUltrasonic = new pros::ADIUltrasonic(5, 6);
-  pros::ADIUltrasonic * backRightUltrasonic = new pros::ADIUltrasonic(7, 8);
+  pros::ADIGyro * gyro1 = new pros::ADIGyro('A');
+  pros::ADIGyro * gyro2 = new pros::ADIGyro('B');
+  pros::ADIUltrasonic * backLeftUltrasonic = new pros::ADIUltrasonic('E', 'F');
+  pros::ADIUltrasonic * backRightUltrasonic = new pros::ADIUltrasonic('G', 'H');
 
   // PID manager
   PID * pid = NULL; // To be initialized during hte initialization routine

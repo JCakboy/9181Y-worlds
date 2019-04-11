@@ -12,8 +12,7 @@ void initialize() {
 	// Initializes the gyro with calibration
 	LCD::setStatus("Calibrating gyroscope...");
 	LCD::setText(2, "***DO NOT MOVE THE ROBOT***");
-	pros::delay(100);
-	ports::gyro1 = new pros::ADIGyro(2); // Port B
+	pros::delay(2000);
 	LCD::setText(2, "");
 
 	LCD::setStatus("Preparing motors...");
