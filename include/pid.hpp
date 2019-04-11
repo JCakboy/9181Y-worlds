@@ -7,7 +7,7 @@ class PID {
 friend void ::opcontrol();
   // Power restraints
   const int MAX_POWER = 120;
-  const int MIN_POWER = 20;
+  const int MIN_POWER = 8;
 
   // PID values
   double movekp = 0;
@@ -24,7 +24,7 @@ friend void ::opcontrol();
   // Resets the motor encoders
   void resetEncoders();
   // Returns the power given the minimum and maximum power restraints
-  int checkPower(int power);
+  double checkPower(double power);
   // Ensures the robot drives straight
   void driveStraight(int power);
   void powerDrive(int powerLeft, int powerRight);

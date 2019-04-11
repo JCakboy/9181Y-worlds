@@ -106,6 +106,10 @@ void opcontrol() {
 			pid->move(40);
 		}
 
+		// DEBUG: Ultrasonic values
+		LCD::setText(4, std::to_string(backLeftUltrasonic->get_value()));
+		LCD::setText(5, std::to_string(backRightUltrasonic->get_value()));
+
 		// Maps the left and right buttons on the controller to the left and right buttons on the Brain LCD
     if (controllerMain->get_digital_new_press(BUTTON_LEFT)) LCD::onLeftButton();
     if (controllerMain->get_digital_new_press(BUTTON_RIGHT)) LCD::onRightButton();

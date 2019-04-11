@@ -45,6 +45,8 @@ namespace ports {
 
   // ADI (3-wire) ports
   pros::ADIGyro * gyro1 = NULL; // To be initilized during the initialization routine for calibration. Port B
+  pros::ADIUltrasonic * backLeftUltrasonic = new pros::ADIUltrasonic(5, 6);
+  pros::ADIUltrasonic * backRightUltrasonic = new pros::ADIUltrasonic(7, 8);
 
   // PID manager
   PID * pid = new PID();

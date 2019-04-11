@@ -45,14 +45,15 @@ void PID::resetEncoders() {
 }
 
 // Returns the power given the minimum and maximum power restraints
-int PID::checkPower(int power) {
+double PID::checkPower(double power) {
   if (!power);
   else if (util::abs(power) > MAX_POWER) power = power / util::abs(power) * MAX_POWER;
   else if (util::abs(power) < MIN_POWER) power = power / util::abs(power) * MIN_POWER;
   return power;
 }
 
-void powerDrive(int powerLeft, int powerRight) {
+// Powers the drive motors based on the given powers
+void PID::powerDrive(int powerLeft, int powerRight) {
   frontLeftDrive->move(powerLeft);
   backLeftDrive->move(powerLeft);
   frontRightDrive->move(powerRight);
@@ -66,6 +67,9 @@ void PID::driveStraight(int power) {
   double partner = 0;
   int powerLeft = 0;
   int powerRight = 0;
+
+  // Modifies kp based on the ratio of power to max power
+  kp = kp * power / MAX_POWER;
 
   // Assign master to the faster moving side
   if (util::abs(frontLeftDrive->get_position()) > util::abs(frontRightDrive->get_position())) {
@@ -116,7 +120,7 @@ void PID::move(double inches) {
 
   for(int i = 0; i < MAX_POWER - 50; i++) {
     power *= 1.5;
-    powerDrive(power, power);
+    driveStraight(power);
     pros::delay(20);
   }
 
