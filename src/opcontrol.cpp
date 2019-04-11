@@ -17,7 +17,7 @@ void drive(pros::Controller * controller) {
 		int diff = middle - 158;
 		// If a signature is detected, lock to it. Otherwise, give control back over to the driver
 		if (middle > -2000)
-			if (util::abs(diff) > 6)
+			if (util::abs(diff) > 2)
 				turnPower = diff / 3 + 10 * util::abs(diff) / diff;
 			else
 				turnPower = 0;
@@ -67,7 +67,7 @@ void opcontrol() {
 			liftLock = true;
 
 		// Maps the intake motor to the right triggers
-		intakeMotor->move(util::limit127((double) controllerMain->get_digital(BUTTON_R1) * 2 * 127 - controllerMain->get_digital(BUTTON_R2) * 127));
+		intakeMotor->move(util::limit127((double) controllerMain->get_digital(BUTTON_R1) * 2 * 127 - controllerMain->get_digital(BUTTON_R2) * 90));
 
 		// Maps the index motor forward to the high left trigger and backward to B
 		indexMotor->move(util::limit127((double) controllerMain->get_digital(BUTTON_L1) * 2 * 127 - controllerMain->get_digital(BUTTON_B) * 127));
