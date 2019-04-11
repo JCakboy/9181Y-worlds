@@ -72,7 +72,7 @@ void opcontrol() {
 
 		// DEBUG - sensor values
 		LCD::setText(2, std::to_string(gyro1->get_value()));
-		LCD::setText(3, std::to_string(gyro2->get_value()));
+		LCD::setText(3, std::to_string(frontUltrasonic->get_value()));
 		LCD::setText(4, std::to_string(backLeftUltrasonic->get_value()));
 		LCD::setText(5, std::to_string(backRightUltrasonic->get_value()));
 

@@ -47,7 +47,7 @@ namespace ports {
 
   // ADI (3-wire) ports
   extern pros::ADIGyro * gyro1;
-  extern pros::ADIGyro * gyro2;
+  extern pros::ADIUltrasonic * frontUltrasonic;
   extern pros::ADIUltrasonic * backLeftUltrasonic;
   extern pros::ADIUltrasonic * backRightUltrasonic;
 

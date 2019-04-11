@@ -27,6 +27,7 @@ friend void ::opcontrol();
   double checkPower(double power);
   // Ensures the robot drives straight
   void driveStraight(int power);
+  // Sends the power commands to the motor
   void powerDrive(int powerLeft, int powerRight);
 public:
   // Constructs the PID object
