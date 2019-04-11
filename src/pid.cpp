@@ -111,14 +111,15 @@ void PID::move(double inches) {
   double lastError = 0;
   int power = 5;
 
-  //convert targetDistance from inches to degrees
+  // Convert targetDistance from inches to degrees
   double targetDistance = inches * getGearRatio();
 
+  // Prepares motors for movement
   setBrakeMode();
   resetEncoders();
 
-
-  for(int i = 0; i < MAX_POWER - 50; i++) {
+  // Accelerates to the max speed smoothly
+  while (power < MAX_POWER) {
     power *= 1.5;
     driveStraight(power);
     pros::delay(20);
