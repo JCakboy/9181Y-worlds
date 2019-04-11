@@ -49,7 +49,7 @@ namespace ports {
   pros::ADIUltrasonic * backRightUltrasonic = new pros::ADIUltrasonic(7, 8);
 
   // PID manager
-  PID * pid = new PID();
+  PID * pid = NULL; // To be initialized during hte initialization routine
 
 }
 
