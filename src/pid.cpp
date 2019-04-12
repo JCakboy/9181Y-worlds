@@ -160,15 +160,17 @@ void PID::pivot(double degrees) {
   double lastError = 0;
   int power = 0;
 
+  gyro1->reset();
+
   /* Converts targetBearing to a 10th of a degree.
      Gyro is never reset, so currentBearing is added to targetBearing */
-  double targetBearing = (targetBearing * 10.0)  + currentBearing;
+  double targetBearing = (degrees * 982 / 90);
 
   while (true) {
     currentBearing = gyro1->get_value();
     // Calculates difference from targetBearing
     error = targetBearing - currentBearing;
-    derivative  = error - lastError;
+    derivative = error - lastError;
     lastError = error;
 
     // Determines power and checks if power is within constraints
@@ -177,6 +179,8 @@ void PID::pivot(double degrees) {
 
     // Powers drive motors to pivot
     powerDrive(power, -power);
+    LCD::setText(2, std::to_string(gyro1->get_value()));
+    LCD::setText(3, std::to_string(error));
     pros::delay(20);
   }
 }
