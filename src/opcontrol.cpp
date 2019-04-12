@@ -103,6 +103,9 @@ void opcontrol() {
 		} else if (selectedAutonomous == -1) {
 			selectedAutonomous = 0;
 			pid->pivot(90);
+			pid->pivot(-90);
+			pid->pivot(-45);
+			pid->pivot(45);
 		}
 
 		// Maps the left and right buttons on the controller to the left and right buttons on the Brain LCD

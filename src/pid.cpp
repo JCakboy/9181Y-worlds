@@ -155,7 +155,7 @@ void PID::pivot(double degrees) {
   double kp = pivotkp;
   double kd = pivotkd;
   double currentBearing = gyro1->get_value();
-  double error = 1;
+  double error = 10;
   double derivative = 0;
   double lastError = 0;
   int power = 0;
@@ -166,7 +166,8 @@ void PID::pivot(double degrees) {
      Gyro is never reset, so currentBearing is added to targetBearing */
   double targetBearing = (degrees * 982 / 90);
 
-  while (true) {
+  while (util::abs(error) >= 10) {
+  // while (true) {
     currentBearing = gyro1->get_value();
     // Calculates difference from targetBearing
     error = targetBearing - currentBearing;
