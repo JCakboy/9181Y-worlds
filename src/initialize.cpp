@@ -27,7 +27,7 @@ void initialize() {
 
 	// Sets the PID values
 	ports::pid = new PID();
-	ports::pid->setMovePID(0.33, 0.2, 0.5);
+	ports::pid->setMovePID(0.365, 0.2, 0.37);
 	ports::pid->setPivotPID(1, 1);
 }
 

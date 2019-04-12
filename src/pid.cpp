@@ -55,8 +55,8 @@ double PID::checkPower(double power) {
 // Powers the drive motors based on the given powers
 void PID::powerDrive(int powerLeft, int powerRight) {
   frontLeftDrive->move(powerLeft);
-  backLeftDrive->move(powerLeft);
   frontRightDrive->move(powerRight);
+  backLeftDrive->move(powerLeft);
   backRightDrive->move(powerRight);
 }
 
@@ -67,9 +67,6 @@ void PID::driveStraight(int power) {
   double partner = 0;
   int powerLeft = 0;
   int powerRight = 0;
-
-  // Modifies kp based on the ratio of power to max power
-  kp = kp * power / MAX_POWER;
 
   // Assign master to the faster moving side
   if (util::abs(frontLeftDrive->get_position()) > util::abs(frontRightDrive->get_position())) {
@@ -106,10 +103,10 @@ void PID::move(double inches) {
   double kp = movekp;
   double kd = movekd;
   double currentDistance = 0;
-  double error = 1;
+  double error = 0;
   double derivative = 0;
   double lastError = 0;
-  int power = 5;
+  int power = MIN_POWER * util::abs(inches) / inches;
 
   // Convert targetDistance from inches to degrees
   double targetDistance = inches * getGearRatio();
@@ -119,13 +116,22 @@ void PID::move(double inches) {
   resetEncoders();
 
   // Accelerates to the max speed smoothly
-  while (power < MAX_POWER) {
-    power *= 1.5;
-    driveStraight(power);
-    pros::delay(20);
+  if (power > 0)
+    while (util::abs(power) < MAX_POWER) {
+      power *= 1.35;
+      powerDrive(power, power);
+      pros::delay(50);
+    }
+  else if (power < 0) {
+    while (util::abs(power) < MAX_POWER) {
+      power *= 1.20;
+      powerDrive(power, power);
+      pros::delay(50);
+    }
   }
-
-  while (error != 0) {
+  currentDistance = (frontRightDrive->get_position() + frontLeftDrive->get_position()) / 2;
+  error = targetDistance - currentDistance;
+  while (util::abs(error) >= 5) {
     currentDistance = (frontRightDrive->get_position() + frontLeftDrive->get_position()) / 2;
     // Calculate proportional error term and the derivative term
     error = targetDistance - currentDistance;
@@ -138,6 +144,8 @@ void PID::move(double inches) {
 
     // Passes the requested power to the straight drive method
     driveStraight(power);
+    LCD::setText(2, std::to_string(gyro1->get_value()));
+    LCD::setText(3, std::to_string(error));
     pros::delay(20);
   }
 }

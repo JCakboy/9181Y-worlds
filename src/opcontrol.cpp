@@ -98,15 +98,12 @@ void opcontrol() {
 
 		if (selectedAutonomous == 1) {
 			selectedAutonomous = 0;
-			pid->resetEncoders();
-			while (frontLeftDrive->get_position() < 720*3) {
-				pid->driveStraight(120);
-				pros::delay(20);
-			}
-
+			pid->move(20);
+			pid->move(-20);
 		} else if (selectedAutonomous == -1) {
 			selectedAutonomous = 0;
-			pid->move(40);
+			pid->move(60);
+			pid->move(-60);
 		}
 
 		// Maps the left and right buttons on the controller to the left and right buttons on the Brain LCD

@@ -7,7 +7,7 @@ class PID {
 friend void ::opcontrol();
   // Power restraints
   const int MAX_POWER = 120;
-  const int MIN_POWER = 8;
+  const int MIN_POWER = 20;
 
   // PID values
   double movekp = 0;
