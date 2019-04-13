@@ -96,18 +96,8 @@ void opcontrol() {
 		if (controllerMain->get_digital_new_press(BUTTON_DOWN))
 			liftMotor->tare_position();
 
-		if (selectedAutonomous == 1) {
-			selectedAutonomous = 0;
-			pid->move(60);
-			pid->move(-60);
-			// pid->frontReset(2);
-		} else if (selectedAutonomous == -1) {
-			selectedAutonomous = 0;
-			// pid->pivot(90);
-			// pid->pivot(-90);
-			// pid->pivot(-45);
-			// pid->pivot(45);
-		} else if (controllerMain->get_digital_new_press(BUTTON_UP)) {
+		// DEBUG - Trigger autonomous through the controller up button
+		if (controllerMain->get_digital_new_press(BUTTON_UP)) {
 			autonomous();
 		}
 

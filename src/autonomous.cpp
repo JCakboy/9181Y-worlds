@@ -55,43 +55,92 @@ void visionAlign() {
   }
 }
 
-void autonomous() {
-  // doubleShot();
+void autonomousSkills() {}
+
+void autonomousBlueFlags() {
+
+}
+
+void autonomousRedFlags() {
+  // Start the flywheel
   flywheelMotor->move(127);
+
+  // Shake the lift
   liftMotor->move(127);
   pros::delay(150);
   liftMotor->move(-127);
   pros::delay(500);
+
+  // Lock the lift
   liftMotor->move_absolute(269, 100);
+
+  // Grab the platform ball
   intakeMotor->move(100);
   pid->move(14.8);
   liftMotor->move_absolute(51, 100);
   pros::delay(350);
   pid->move(-13.5);
 
-
+  // Turn and vision align to the flags
   pid->pivot(-110);
   pid->move(6.5);
   intakeMotor->move(0);
   pros::delay(250);
   visionAlign();
   liftMotor->move_absolute(240, 100);
+
+  // Shoot for the high and mid flags
   doubleShot();
+
+  // Shutdown the flywheel
   flywheelMotor->move(0);
 
+  // Drive forward and toggle the low flag
   pid->move(8);
-
   pros::delay(50);
 
+  // Get in position for next routine
   pid->move(-5.5);
-
   pid->pivot(95);
 
+  // Get the ball, TBD
   intakeMotor->move(127);
-
   pid->move(4.5);
-
   pros::delay(250);
-
   pid->move(-2.5);
+}
+
+void autonomousBlueFar() {
+
+}
+
+void autonomousRedFar() {
+
+}
+
+void autonomousOther(int selected) {
+
+}
+
+void autonomous() {
+  switch (selectedAutonomous) {
+    case 0:
+      autonomousSkills();
+      break;
+    case 1:
+      autonomousBlueFlags();
+      break;
+    case 2:
+      autonomousRedFlags();
+      break;
+    case 3:
+      autonomousBlueFar();
+      break;
+    case 4:
+      autonomousRedFar();
+      break;
+    default:
+      autonomousOther(selectedAutonomous);
+      break;
+  }
 }
