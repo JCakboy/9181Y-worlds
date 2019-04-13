@@ -78,33 +78,20 @@ void autonomous() {
   liftMotor->move_absolute(240, 100);
   doubleShot();
   flywheelMotor->move(0);
-  pid->resetEncoders();
-  while (frontLeftDrive->get_position() < 230) {
-  	pid->driveStraight(60);
-  	pros::delay(20);
-  }
+
+  pid->move(8);
 
   pros::delay(50);
 
-  pid->resetEncoders();
-  while (frontLeftDrive->get_position() > -160) {
-    pid->driveStraight(-45);
-    pros::delay(20);
-  }
+  pid->move(-5.5);
+
   pid->pivot(95);
 
   intakeMotor->move(127);
 
-  pid->resetEncoders();
-  while (frontLeftDrive->get_position() < 130) {
-    pid->driveStraight(45);
-    pros::delay(20);
-  }
+  pid->move(4.5);
+
   pros::delay(250);
 
-  pid->resetEncoders();
-  while (frontLeftDrive->get_position() > -70) {
-    pid->driveStraight(-45);
-    pros::delay(20);
-  }
+  pid->move(-2.5);
 }

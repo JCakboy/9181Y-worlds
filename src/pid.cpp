@@ -121,16 +121,22 @@ void PID::move(double inches) {
 
   // Accelerates to the max speed smoothly
   if (power > 0)
-    while (util::abs(power) < MAX_POWER) {
+    while (util::abs(power) < MAX_POWER && util::abs(power) < kp * error) {
       power *= 1.40;
       driveStraight(power);
       pros::delay(60);
+
+      currentDistance = (frontRightDrive->get_position() + frontLeftDrive->get_position()) / 2;
+      error = targetDistance - currentDistance;
     }
   else if (power < 0) {
-    while (util::abs(power) < MAX_POWER) {
+    while (util::abs(power) < MAX_POWER && util::abs(power) < kp * error) {
       power *= 1.15;
       driveStraight(power);
       pros::delay(40);
+
+      currentDistance = (frontRightDrive->get_position() + frontLeftDrive->get_position()) / 2;
+      error = targetDistance - currentDistance;
     }
   }
   currentDistance = (frontRightDrive->get_position() + frontLeftDrive->get_position()) / 2;
@@ -152,6 +158,17 @@ void PID::move(double inches) {
     LCD::setText(3, std::to_string(error));
     pros::delay(20);
   }
+}
+
+void PID::velocityMove(double inches, double power) {
+  double degrees = inches * pid->getGearRatio();
+
+  pid->resetEncoders();
+  while (util::abs(frontLeftDrive->get_position()) < util::abs(inches) || util::abs(frontRightDrive->get_position()) < util::abs(inches)) {
+    driveStraight(power * util::abs(degrees) / degrees);
+    pros::delay(20);
+  }
+  powerDrive(0, 0);
 }
 
 // Pivots the robot the given amount of degrees

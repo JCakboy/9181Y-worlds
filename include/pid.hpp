@@ -4,7 +4,7 @@
 #include "main.h"
 extern void doubleShot();
 class PID {
-friend void ::autonomous();
+
   // Power restraints
   const int MAX_POWER = 120;
   const int MIN_POWER = 20;
@@ -44,6 +44,8 @@ public:
 
   // Moves the robot the given amount of inches to the desired location
   void move(double inches);
+  // Moves the robot the given amount of inches, while only using velocity PID
+  void velocityMove(double inches, double power);
   // Pivots the robot the given amount of degrees
   void pivot(double degrees);
 
