@@ -22,15 +22,89 @@ void doubleShot() {
   indexMotor->move(127);
   pros::delay(40);
   indexMotor->move(0);
-  pid->move(25);
+  pid->move(24);
   indexMotor->move(127);
   intakeMotor->move(127);
   pros::delay(300);
   indexMotor->move(0);
+  intakeMotor->move(0);
+}
+
+void visionAlign() {
+  while (true) {
+    if (flagVision != NULL) {
+      // Prepare variables for decision
+		int sigID = LCD::isAutonomousBlue() ? 1 : 2;
+		pros::vision_object_s_t sig = flagVision->get_by_sig(0, sigID);
+		int middle = util::sign(sig.x_middle_coord);
+		int diff = middle - 158;
+		// If a signature is detected, lock to it. Otherwise, give control back over to the driver
+		if (middle > -2000)
+			if (util::abs(diff) > 2) {
+				int turnPower = diff / 3 + 10 * util::abs(diff) / diff;
+        int leftPower = turnPower;
+      	int rightPower = -turnPower;
+      	frontLeftDrive->move(leftPower);
+      	backLeftDrive->move(leftPower);
+      	frontRightDrive->move(rightPower);
+      	backRightDrive->move(rightPower);
+      } else
+				break;
+		else;
+  	}
+  }
 }
 
 void autonomous() {
   // doubleShot();
+  flywheelMotor->move(127);
+  liftMotor->move(127);
+  pros::delay(150);
+  liftMotor->move(-127);
+  pros::delay(500);
+  liftMotor->move_absolute(269, 100);
+  intakeMotor->move(100);
+  pid->move(14.8);
+  liftMotor->move_absolute(51, 100);
+  pros::delay(350);
+  pid->move(-13.5);
 
-  pid->frontAlignReset();
+
+  pid->pivot(-110);
+  pid->move(6.5);
+  intakeMotor->move(0);
+  pros::delay(250);
+  visionAlign();
+  liftMotor->move_absolute(240, 100);
+  doubleShot();
+  flywheelMotor->move(0);
+  pid->resetEncoders();
+  while (frontLeftDrive->get_position() < 230) {
+  	pid->driveStraight(60);
+  	pros::delay(20);
+  }
+
+  pros::delay(50);
+
+  pid->resetEncoders();
+  while (frontLeftDrive->get_position() > -160) {
+    pid->driveStraight(-45);
+    pros::delay(20);
+  }
+  pid->pivot(95);
+
+  intakeMotor->move(127);
+
+  pid->resetEncoders();
+  while (frontLeftDrive->get_position() < 130) {
+    pid->driveStraight(45);
+    pros::delay(20);
+  }
+  pros::delay(250);
+
+  pid->resetEncoders();
+  while (frontLeftDrive->get_position() > -70) {
+    pid->driveStraight(-45);
+    pros::delay(20);
+  }
 }

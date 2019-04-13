@@ -4,7 +4,7 @@
 #include "main.h"
 extern void doubleShot();
 class PID {
-friend void ::opcontrol();
+friend void ::autonomous();
   // Power restraints
   const int MAX_POWER = 120;
   const int MIN_POWER = 20;
@@ -28,8 +28,6 @@ friend void ::opcontrol();
   void resetEncoders();
   // Returns the power given the minimum and maximum power restraints
   double checkPower(double power);
-  // Ensures the robot drives straight
-  void driveStraight(int power);
   // Sends the power commands to the motor
   void powerDrive(int powerLeft, int powerRight);
 public:
@@ -40,6 +38,9 @@ public:
   void setMovePID(double movekp, double movekd, double straightkp, double straightkd);
   // Sets the pivot PID values
   void setPivotPID(double pivotkp, double pivotkd);
+
+  // Ensures the robot drives straight
+  void driveStraight(int power);
 
   // Moves the robot the given amount of inches to the desired location
   void move(double inches);
