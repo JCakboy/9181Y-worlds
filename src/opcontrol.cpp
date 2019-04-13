@@ -97,9 +97,8 @@ void opcontrol() {
 			liftMotor->tare_position();
 
 		// DEBUG - Trigger autonomous through the controller up button
-		if (controllerMain->get_digital_new_press(BUTTON_UP)) {
+		if (controllerMain->get_digital_new_press(BUTTON_UP))
 			autonomous();
-		}
 
 		// Maps the left and right buttons on the controller to the left and right buttons on the Brain LCD
     if (controllerMain->get_digital_new_press(BUTTON_LEFT)) LCD::onLeftButton();

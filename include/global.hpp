@@ -44,6 +44,7 @@ namespace ports {
 
   // Vision
   extern pros::Vision * flagVision;
+  extern pros::Vision * capVision;
 
   // ADI (3-wire) ports
   extern pros::ADIGyro * gyro1;
