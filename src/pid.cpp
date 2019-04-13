@@ -7,10 +7,11 @@ using namespace ports;
 PID::PID() = default;
 
 // Sets the move PID values
-void PID::setMovePID(double movekp, double movekd, double straightkp) {
+void PID::setMovePID(double movekp, double movekd, double straightkp, double straightkd) {
   PID::movekp = movekp;
   PID::movekd = movekd;
   PID::straightkp = straightkp;
+  PID::straightkd = straightkd;
 }
 
 // Sets the pivot PID values
@@ -63,6 +64,7 @@ void PID::powerDrive(int powerLeft, int powerRight) {
 // Ensures the robot drives straight
 void PID::driveStraight(int power) {
   double kp = straightkp;
+  double kd = straightkd;
   double master = 0;
   double partner = 0;
   int powerLeft = 0;
@@ -79,15 +81,17 @@ void PID::driveStraight(int power) {
 
   // Calculate the difference between the wheels from the two sides of the chassis
   double error = master - partner;
+  double derivative = error - straightle;
+  straightle = error;
 
   // Decrease the side that is moving faster than the other
   if (util::abs(frontLeftDrive->get_position()) >= util::abs(frontRightDrive->get_position())) {
-    powerLeft = power - (error * kp);
+    powerLeft = power - (error * kp - derivative * kd);
     powerRight = power;
   }
   else if (util::abs(frontLeftDrive->get_position())  < util::abs(frontRightDrive->get_position())) {
     powerLeft = power;
-    powerRight = power - (error * kp);
+    powerRight = power - (error * kp - derivative * kd);
   }
 
   // Ensure that power is within constraints
@@ -118,15 +122,15 @@ void PID::move(double inches) {
   // Accelerates to the max speed smoothly
   if (power > 0)
     while (util::abs(power) < MAX_POWER) {
-      power *= 1.35;
-      powerDrive(power, power);
-      pros::delay(50);
+      power *= 1.40;
+      driveStraight(power);
+      pros::delay(60);
     }
   else if (power < 0) {
     while (util::abs(power) < MAX_POWER) {
-      power *= 1.20;
-      powerDrive(power, power);
-      pros::delay(50);
+      power *= 1.15;
+      driveStraight(power);
+      pros::delay(40);
     }
   }
   currentDistance = (frontRightDrive->get_position() + frontLeftDrive->get_position()) / 2;
@@ -167,7 +171,6 @@ void PID::pivot(double degrees) {
   double targetBearing = (degrees * 982 / 90);
 
   while (util::abs(error) >= 10) {
-  // while (true) {
     currentBearing = gyro1->get_value();
     // Calculates difference from targetBearing
     error = targetBearing - currentBearing;
@@ -184,4 +187,64 @@ void PID::pivot(double degrees) {
     LCD::setText(3, std::to_string(error));
     pros::delay(20);
   }
+
+}
+
+// Front resets the robot using the ultrasonics
+void PID::frontReset(double inches) {
+  // Get the current front ultrasonic distance
+  double value = frontUltrasonic->get_value();
+
+  // If no object is detected, ignore this call
+  if (value == -1) return;
+
+  // Apply a constant value to the ultrasonic
+  value -= 92;
+  // Convert that distance to inches
+  double currentInches = value / 25.4;
+  // Calculate the error
+  double error = currentInches - inches;
+  // Drive to the desired position
+  move(error);
+}
+
+// Back resets the robot using the ultrasonics
+void PID::backReset(double inches) {
+  // Get the current ultrasonic distances
+  double valueLeft = backLeftUltrasonic->get_value();
+  double valueRight = backRightUltrasonic->get_value();
+  double valueAvg = (valueLeft + valueRight) / 2;
+
+  // If no object is detected, ignore this call
+  if (valueLeft == -1 || valueRight == -1) return;
+
+  // Apply a constant value to the ultrasonic
+  valueAvg -= 45;
+  // Convert that distance to inches
+  double currentInches = valueAvg / 25.4;
+  // Calculate the error
+  double error = inches - currentInches;
+  // Drive to the desired position
+  move(error);
+}
+
+// Front resets the robot against the wall using ultrasonics, aligning it
+void PID::frontAlignReset() {
+  while (frontUltrasonic->get_value() > 400) {
+    powerDrive(95, 95);
+    pros::delay(20);
+  }
+  while (frontUltrasonic->get_value() > 110) {
+    powerDrive(60, 60);
+    pros::delay(20);
+  }
+  pros::delay(100);
+  powerDrive(0, 0);
+}
+
+// Back resets the robot against the wall using ultrasonics, aligning it
+void PID::backAlignReset() {
+  while (backLeftUltrasonic->get_value() > 48 || backRightUltrasonic->get_value() > 48)
+    powerDrive(-60, -60);
+  powerDrive(0, 0);
 }

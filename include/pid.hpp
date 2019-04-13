@@ -2,7 +2,7 @@
 #define _PID_HPP_
 
 #include "main.h"
-
+extern void doubleShot();
 class PID {
 friend void ::opcontrol();
   // Power restraints
@@ -13,8 +13,11 @@ friend void ::opcontrol();
   double movekp = 0;
   double movekd = 0;
   double straightkp = 0;
+  double straightkd = 0;
   double pivotkp = 0;
   double pivotkd = 0;
+
+  double straightle = 0;
 
   // Calculates and returns the gear ratio for the drive
   static double getGearRatio();
@@ -34,7 +37,7 @@ public:
   PID();
 
   // Sets the move PID values
-  void setMovePID(double movekp, double movekd, double straightkp);
+  void setMovePID(double movekp, double movekd, double straightkp, double straightkd);
   // Sets the pivot PID values
   void setPivotPID(double pivotkp, double pivotkd);
 
@@ -43,6 +46,14 @@ public:
   // Pivots the robot the given amount of degrees
   void pivot(double degrees);
 
+  // Front resets the robot using the ultrasonics
+  void frontReset(double inches);
+  // Back resets the robot using the ultrasonics
+  void backReset(double inches);
+  // Front resets the robot against the wall using ultrasonics, aligning it
+  void frontAlignReset();
+  // Back resets the robot against the wall using ultrasonics, aligning it
+  void backAlignReset();
 };
 
 #endif

@@ -1,5 +1,8 @@
 #include "main.h"
 
+// Dump ports namespace for ease of use
+using namespace ports;
+
 /**
  * Runs the user autonomous code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
@@ -12,4 +15,22 @@
  * from where it left off.
  */
 
-void autonomous() {}
+void doubleShot() {
+  flywheelMotor->move(127);
+  while (flywheelMotor->get_actual_velocity() < 580)
+    pros::delay(1);
+  indexMotor->move(127);
+  pros::delay(40);
+  indexMotor->move(0);
+  pid->move(25);
+  indexMotor->move(127);
+  intakeMotor->move(127);
+  pros::delay(300);
+  indexMotor->move(0);
+}
+
+void autonomous() {
+  // doubleShot();
+
+  pid->frontAlignReset();
+}
