@@ -86,6 +86,13 @@ void LCD::updateScreen(bool forceController) {
   if (LCD::cycles > 200 || forceController) LCD::cycles = 0;
 }
 
+void LCD::printDebugInformation() {
+  LCD::setText(2, std::to_string(ports::gyro1->get_value()));
+  LCD::setText(3, std::to_string(ports::frontUltrasonic->get_value()));
+  LCD::setText(4, std::to_string(ports::backLeftUltrasonic->get_value()));
+  LCD::setText(5, std::to_string(ports::backRightUltrasonic->get_value()));
+}
+
 void LCD::setControllerText(std::string text) {
   // Make sure the text is padded to clear the existing text
   while (text.size() < 18) text += " ";

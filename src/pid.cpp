@@ -156,8 +156,7 @@ void PID::move(double inches) {
 
     // Passes the requested power to the straight drive method
     driveStraight(power);
-    LCD::setText(2, std::to_string(gyro1->get_value()));
-    LCD::setText(3, std::to_string(error));
+    LCD::printDebugInformation();
     pros::delay(20);
   }
 }
@@ -170,6 +169,7 @@ void PID::velocityMove(double inches, double power) {
   // While the target has not been reached, power the drive
   while (util::abs(frontLeftDrive->get_position()) < util::abs(inches) || util::abs(frontRightDrive->get_position()) < util::abs(inches)) {
     driveStraight(power * util::abs(degrees) / degrees);
+    LCD::printDebugInformation();
     pros::delay(20);
   }
   // When the target is reached, stop
@@ -212,6 +212,7 @@ void PID::customMove(double leftInches, double rightInches) {
 
     // Passes the requested power to the motors
     powerDrive(leftPower, rightPower);
+    LCD::printDebugInformation();
     pros::delay(20);
   }
 }
@@ -245,8 +246,7 @@ void PID::pivot(double degrees) {
 
     // Powers drive motors to pivot
     powerDrive(power, -power);
-    LCD::setText(2, std::to_string(gyro1->get_value()));
-    LCD::setText(3, std::to_string(error));
+    LCD::printDebugInformation();
     pros::delay(20);
   }
 
@@ -294,10 +294,12 @@ void PID::backReset(double inches) {
 void PID::frontAlignReset() {
   while (frontUltrasonic->get_value() > 400) {
     powerDrive(95, 95);
+    LCD::printDebugInformation();
     pros::delay(20);
   }
   while (frontUltrasonic->get_value() > 110) {
     powerDrive(60, 60);
+    LCD::printDebugInformation();
     pros::delay(20);
   }
   pros::delay(100);
@@ -306,7 +308,10 @@ void PID::frontAlignReset() {
 
 // Back resets the robot against the wall using ultrasonics, aligning it
 void PID::backAlignReset() {
-  while (backLeftUltrasonic->get_value() > 48 || backRightUltrasonic->get_value() > 48)
+  while (backLeftUltrasonic->get_value() > 48 || backRightUltrasonic->get_value() > 48) {
     powerDrive(-60, -60);
+    LCD::printDebugInformation();
+    pros::delay(20);
+  }
   powerDrive(0, 0);
 }

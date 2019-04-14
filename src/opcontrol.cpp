@@ -52,6 +52,9 @@ void opcontrol() {
 	// Sets the status on the LCD
 	LCD::setStatus("Operator Control");
 
+	// Prints debug information to the LCD
+	LCD::printDebugInformation();
+
 	// Flag to set when the arm is locked
 	bool armLock = false;
 
@@ -69,12 +72,6 @@ void opcontrol() {
       if (armLock) armLock = false;
       liftMotor->move(controllerMain->get_analog(STICK_RIGHT_Y));
     }
-
-		// DEBUG - sensor values
-		LCD::setText(2, std::to_string(gyro1->get_value()));
-		LCD::setText(3, std::to_string(frontUltrasonic->get_value()));
-		LCD::setText(4, std::to_string(backLeftUltrasonic->get_value()));
-		LCD::setText(5, std::to_string(backRightUltrasonic->get_value()));
 
 		// Lock the lift if A is pressed
 		if (controllerMain->get_digital(BUTTON_A))
