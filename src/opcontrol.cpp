@@ -52,9 +52,6 @@ void opcontrol() {
 	// Sets the status on the LCD
 	LCD::setStatus("Operator Control");
 
-	// Prints debug information to the LCD
-	LCD::printDebugInformation();
-
 	// Flag to set when the arm is locked
 	bool armLock = false;
 
@@ -100,6 +97,9 @@ void opcontrol() {
 		// Maps the left and right buttons on the controller to the left and right buttons on the Brain LCD
     if (controllerMain->get_digital_new_press(BUTTON_LEFT)) LCD::onLeftButton();
     if (controllerMain->get_digital_new_press(BUTTON_RIGHT)) LCD::onRightButton();
+
+		// Prints debug information to the LCD
+		LCD::printDebugInformation();
 
 		pros::delay(20);
 	}
