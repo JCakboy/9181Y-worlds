@@ -46,6 +46,8 @@ public:
   void move(double inches);
   // Moves the robot the given amount of inches, while only using velocity PID
   void velocityMove(double inches, double power);
+  // Moves the robot with custom left and right targets
+  void customMove(double leftInches, double rightInches);
   // Pivots the robot the given amount of degrees
   void pivot(double degrees);
 

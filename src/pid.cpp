@@ -139,8 +139,10 @@ void PID::move(double inches) {
       error = targetDistance - currentDistance;
     }
   }
+
   currentDistance = (frontRightDrive->get_position() + frontLeftDrive->get_position()) / 2;
   error = targetDistance - currentDistance;
+
   while (util::abs(error) >= 5) {
     currentDistance = (frontRightDrive->get_position() + frontLeftDrive->get_position()) / 2;
     // Calculate proportional error term and the derivative term
@@ -161,14 +163,57 @@ void PID::move(double inches) {
 }
 
 void PID::velocityMove(double inches, double power) {
+  // Convert the inches to degrees
   double degrees = inches * pid->getGearRatio();
 
   pid->resetEncoders();
+  // While the target has not been reached, power the drive
   while (util::abs(frontLeftDrive->get_position()) < util::abs(inches) || util::abs(frontRightDrive->get_position()) < util::abs(inches)) {
     driveStraight(power * util::abs(degrees) / degrees);
     pros::delay(20);
   }
+  // When the target is reached, stop
   powerDrive(0, 0);
+}
+
+
+void PID::customMove(double leftInches, double rightInches) {
+  double kp = movekp;
+  double kd = movekd;
+
+  double leftTarget = leftInches * getGearRatio();
+  double rightTarget = rightInches * getGearRatio();
+
+  double leftError = leftTarget;
+  double rightError = rightTarget;
+  double lastLeftError = leftTarget;
+  double lastRightError = rightTarget;
+
+  // Prepares motors for movement
+  setBrakeMode();
+  resetEncoders();
+
+  while (util::abs(leftError) >= 5 || util::abs(rightError) >= 5) {
+    // Calculate proportional error term and the derivative term
+    leftError = leftTarget - frontLeftDrive->get_position();
+    rightError = rightTarget - frontRightDrive->get_position();
+
+    double leftDerivative = leftError - lastLeftError;
+    double rightDerivative = rightError - lastRightError;
+
+    lastLeftError = leftError;
+    lastRightError = rightError;
+
+    // Determine power and checks if power is within constraints
+    double leftPower = (leftPower * kp) + (leftDerivative * kd);
+    double rightPower = (rightError * kp) + (rightDerivative * kd);
+    leftPower = checkPower(leftPower);
+    rightPower = checkPower(rightPower);
+
+    // Passes the requested power to the motors
+    powerDrive(leftPower, rightPower);
+    pros::delay(20);
+  }
 }
 
 // Pivots the robot the given amount of degrees
