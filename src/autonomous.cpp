@@ -23,7 +23,7 @@ void doubleShot() {
   pros::delay(45);
   indexMotor->move(0);
   pros::delay(30);
-  pid->move(25.75);
+  pid->move(25.6);
   indexMotor->move(127);
   intakeMotor->move(127);
   pros::delay(300);
@@ -73,13 +73,13 @@ void autonomousBlueFlags() {
 
   // Grab the platform ball
   intakeMotor->move(100);
-  pid->move(14.8);
+  pid->move(18.7);
   liftMotor->move_absolute(51, 100);
   pros::delay(350);
-  pid->move(-14.5);
+  pid->move(-20.2);
 
   // Turn and vision align to the flags
-  pid->pivot(115);
+  pid->pivot(108);
   pid->move(5);
   intakeMotor->move(0);
   visionAlign();
@@ -92,21 +92,21 @@ void autonomousBlueFlags() {
   flywheelMotor->move(0);
 
   // Drive forward and toggle the low flag
-  pid->move(8.75);
+  pid->move(9.25);
 
   // Get in position for next routine
-  pid->move(-22);
-  pid->pivot(-105);
+  pid->move(-24);
+  pid->pivot(-108);
 
   // Drive forward and intake the ball and angled cap
-  liftMotor->move_absolute(183, 100);
+  liftMotor->move_absolute(190, 100);
   intakeMotor->move(127);
-  pid->move(38.35);
+  pid->move(39.5);
   flywheelMotor->move(127);
   pros::delay(100);
 
   // Turn and flip the ground cap
-  pid->move(-8);
+  pid->move(-9.5);
   liftMotor->move_absolute(0, 100);
   pid->pivot(130);
 
@@ -118,10 +118,10 @@ void autonomousBlueFlags() {
 //   liftMotor->move_absolute(269, 100);
   pid->move(5.9);
   liftMotor->move_absolute(277, 127);
-  pros::delay(100);
+  pros::delay(250);
 
   // Turn and fire at the mid flag, and ram into the low cap
-  pid->pivot(-50);
+  pid->pivot(-47);
   pid->resetEncoders();
   while (frontLeftDrive->get_position() < 355) {
     pid->driveStraight(127);
