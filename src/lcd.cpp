@@ -51,7 +51,7 @@ void LCD::initialize(pros::Controller * controllerMain, pros::Controller * contr
 
   // Signal the commpletion of initialization and update the screen
   LCD::setStatus("LCD initialized");
-  updateScreen();
+  updateScreen(true);
 }
 
 void LCD::onLeftButton() {
@@ -84,6 +84,13 @@ void LCD::updateScreen(bool forceController) {
     LCD::setControllerText("Auto: " + LCD::getAutonomousName());
   LCD::cycles++;
   if (LCD::cycles > 200 || forceController) LCD::cycles = 0;
+}
+
+void LCD::printDebugInformation() {
+  LCD::setText(2, std::to_string(ports::gyro1->get_value()));
+  LCD::setText(3, std::to_string(ports::frontUltrasonic->get_value()));
+  LCD::setText(4, std::to_string(ports::backLeftUltrasonic->get_value()));
+  LCD::setText(5, std::to_string(ports::backRightUltrasonic->get_value()));
 }
 
 void LCD::setControllerText(std::string text) {

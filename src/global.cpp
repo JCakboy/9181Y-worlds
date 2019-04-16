@@ -42,8 +42,16 @@ namespace ports {
 
   // Vision
   pros::Vision * flagVision = new pros::Vision(5);
+  pros::Vision * capVision = new pros::Vision(6);
 
   // ADI (3-wire) ports
+  pros::ADIGyro * gyro1 = NULL; // To be initialized in the initialization routine. Port A
+  pros::ADIUltrasonic * frontUltrasonic = new pros::ADIUltrasonic('C', 'D');
+  pros::ADIUltrasonic * backLeftUltrasonic = new pros::ADIUltrasonic('E', 'F');
+  pros::ADIUltrasonic * backRightUltrasonic = new pros::ADIUltrasonic('G', 'H');
+
+  // PID manager
+  PID * pid = NULL; // To be initialized during hte initialization routine
 
 }
 

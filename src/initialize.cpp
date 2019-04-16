@@ -9,6 +9,13 @@
 void initialize() {
 	LCD::initialize(ports::controllerMain, ports::controllerPartner);
 
+	// Initializes the gyro with calibration
+	LCD::setStatus("Calibrating gyroscope...");
+	LCD::setText(2, "***DO NOT MOVE THE ROBOT***");
+	ports::gyro1 = new pros::ADIGyro('A', -1);
+	LCD::setText(2, "");
+
+	LCD::setStatus("Preparing motors...");
 	// Sets the lift to brake
 	ports::liftMotor->set_brake_mode(BRAKE_BRAKE);
 
@@ -17,6 +24,11 @@ void initialize() {
 	ports::backLeftDrive->set_brake_mode(BRAKE_BRAKE);
 	ports::frontRightDrive->set_brake_mode(BRAKE_BRAKE);
 	ports::backRightDrive->set_brake_mode(BRAKE_BRAKE);
+
+	// Sets the PID values
+	ports::pid = new PID();
+	ports::pid->setMovePID(0.365, 0.65, 0.45, 0.1);
+	ports::pid->setPivotPID(0.132, 0.285);
 }
 
 /**

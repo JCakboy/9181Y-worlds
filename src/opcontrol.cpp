@@ -56,7 +56,7 @@ void opcontrol() {
 
 		// Maps the right joystick to the lift, implementing liftLock
 		if (controllerMain->get_analog(STICK_RIGHT_Y) == 0 && liftLock)
-      liftMotor->move_absolute(269, 100);
+      liftMotor->move_absolute(285, 100);
     else {
       if (liftLock) liftLock = false;
       liftMotor->move(controllerMain->get_analog(STICK_RIGHT_Y));
@@ -77,14 +77,20 @@ void opcontrol() {
 			flywheelRunning = !flywheelRunning;
 			flywheelMotor->move(flywheelRunning * 127);
 		}
-
 		// If down is pressed, reset the lift
 		if (controllerMain->get_digital_new_press(BUTTON_DOWN))
 			liftMotor->tare_position();
 
+		// DEBUG - Trigger autonomous through the controller up button
+		if (controllerMain->get_digital_new_press(BUTTON_UP))
+			autonomous();
+
 		// Maps the left and right buttons on the controller to the left and right buttons on the Brain LCD
     if (controllerMain->get_digital_new_press(BUTTON_LEFT)) LCD::onLeftButton();
     if (controllerMain->get_digital_new_press(BUTTON_RIGHT)) LCD::onRightButton();
+
+		// Prints debug information to the LCD
+		LCD::printDebugInformation();
 
 		pros::delay(20);
 	}

@@ -1,5 +1,8 @@
 #include "main.h"
 
+// Dump ports namespace for ease of use
+using namespace ports;
+
 /**
  * Runs the user autonomous code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
@@ -11,4 +14,171 @@
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous() {}
+
+void doubleShot() {
+  flywheelMotor->move(127);
+  while (flywheelMotor->get_actual_velocity() < 580)
+    pros::delay(1);
+  indexMotor->move(127);
+  pros::delay(45);
+  indexMotor->move(0);
+  pros::delay(30);
+  pid->move(25.75);
+  indexMotor->move(127);
+  intakeMotor->move(127);
+  pros::delay(300);
+  indexMotor->move(0);
+  intakeMotor->move(0);
+}
+
+void visionAlign() {
+  while (true) {
+    if (flagVision != NULL) {
+      // Prepare variables for decision
+		int sigID = LCD::isAutonomousBlue() ? 1 : 2;
+		pros::vision_object_s_t sig = flagVision->get_by_sig(0, sigID);
+		int middle = util::sign(sig.x_middle_coord);
+		int diff = middle - 158;
+		// If a signature is detected, lock to it. Otherwise, give control back over to the driver
+		if (middle > -2000)
+			if (util::abs(diff) > 5) {
+				int turnPower = diff / 3 + 10 * util::abs(diff) / diff;
+        int leftPower = turnPower;
+      	int rightPower = -turnPower;
+      	frontLeftDrive->move(leftPower);
+      	backLeftDrive->move(leftPower);
+      	frontRightDrive->move(rightPower);
+      	backRightDrive->move(rightPower);
+      } else
+				break;
+		else;
+  	}
+  }
+}
+
+void autonomousSkills() {}
+
+void autonomousBlueFlags() {
+  pid->pivot(90);
+  pid->pivot(-90);
+  pid->pivot(-45);
+  pid->pivot(45);
+}
+
+void autonomousRedFlags() {
+  // Start the flywheel
+  flywheelMotor->move(127);
+
+  // Shake the lift
+  liftMotor->move(127);
+  pros::delay(150);
+  liftMotor->move(-127);
+  pros::delay(350);
+
+  // Lock the lift
+  liftMotor->move_absolute(269, 100);
+
+  // Grab the platform ball
+  intakeMotor->move(100);
+  pid->move(14.8);
+  liftMotor->move_absolute(51, 100);
+  pros::delay(350);
+  pid->move(-14.5);
+
+  // Turn and vision align to the flags
+  pid->pivot(-115);
+  pid->move(5);
+  intakeMotor->move(0);
+  visionAlign();
+  liftMotor->move_absolute(269, 100);
+
+  // Shoot for the high and mid flags
+  doubleShot();
+
+  // Shutdown the flywheel
+  flywheelMotor->move(0);
+
+  // Drive forward and toggle the low flag
+  pid->move(8.75);
+
+  // Get in position for next routine
+  pid->move(-22);
+  pid->pivot(105);
+
+  liftMotor->move_absolute(183, 100);
+  intakeMotor->move(127);
+  pid->move(38.35);
+  flywheelMotor->move(127);
+  pros::delay(100);
+  pid->move(-8);
+  liftMotor->move_absolute(0, 100);
+  pid->pivot(-130);
+//   pid->move(13);
+//   liftMotor->move_absolute(50, 127);
+//   pros::delay(100);
+//   pid->move(-10);
+//   pid->move(12);
+//   liftMotor->move_absolute(269, 100);
+
+  pid->move(5.9);
+  liftMotor->move_absolute(277, 127);
+  pros::delay(100);
+  pid->pivot(50);
+
+  pid->resetEncoders();
+  while (frontLeftDrive->get_position() < 355) {
+    pid->driveStraight(127);
+    pros::delay(10);
+  }
+
+  intakeMotor->move(127);
+  indexMotor->move(127);
+
+  pid->resetEncoders();
+  while (frontLeftDrive->get_position() < 540) {
+    pid->driveStraight(127);
+    pros::delay(10);
+  }
+  pid->driveStraight(0);
+  //
+  // pid->move(15);
+  // intakeMotor->move(127);
+  // indexMotor->move(127);
+  // pros::delay(300);
+  // pid->move(12);
+}
+
+void autonomousBlueFar() {
+
+}
+
+void autonomousRedFar() {
+
+}
+
+void autonomousOther(int selected) {
+
+}
+
+void autonomous() {
+  switch (selectedAutonomous) {
+    case 0:
+      autonomousSkills();
+      break;
+    case 1:
+      autonomousBlueFlags();
+      break;
+    case 2:
+      autonomousRedFlags();
+      break;
+    case 3:
+      autonomousBlueFar();
+      break;
+    case 4:
+      autonomousRedFar();
+      break;
+    default:
+      autonomousOther(selectedAutonomous);
+      break;
+  }
+}
