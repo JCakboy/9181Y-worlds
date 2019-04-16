@@ -66,4 +66,7 @@ extern bool flywheelRunning;
 // Flag to set when the lift is locked
 extern bool liftLock;
 
+// Holds the last vision error value
+extern double visionLastError;
+
 #endif

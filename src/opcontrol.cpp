@@ -3,6 +3,9 @@
 // Dump ports namespace for ease of use
 using namespace ports;
 
+bool visionFinished = false;
+double visionLastError = 0;
+
 // Drives the robot based on the given controller
 void drive(pros::Controller * controller) {
 	int movePower = controller->get_analog(STICK_LEFT_Y);
@@ -10,20 +13,32 @@ void drive(pros::Controller * controller) {
 
 	// If vision align is requested, take over the turn power
 	if (controller->get_digital(BUTTON_L2) && flagVision != NULL) {
+		// PID values
+		double kp = 0.32;
+		double kd = 0.42;
+
 		// Prepare variables for decision
 		int sigID = LCD::isAutonomousBlue() ? 1 : 2;
 		pros::vision_object_s_t sig = flagVision->get_by_sig(0, sigID);
 		int middle = util::sign(sig.x_middle_coord);
-		int diff = middle - 158;
+		double error = middle - 158;
 		// If a signature is detected, lock to it. Otherwise, give control back over to the driver
-		if (middle > -2000)
-			if (util::abs(diff) > 2)
-				turnPower = diff / 3 + 10 * util::abs(diff) / diff;
-			else
+		if (middle > -2000) {
+			if (util::abs(error) > 2)
+				turnPower = error * kp + (12 * util::abs(error) / error) + (kd * (error - visionLastError));
+			else {
 				turnPower = 0;
-		else;
+				if (!visionFinished) {
+					visionFinished = true;
+					controller->rumble(".");
+				}
+			}
+			visionLastError = error;
+		}
+	} else {
+		visionFinished = false;
+		visionLastError = 0;
 	}
-
 	int leftPower = movePower + turnPower;
 	int rightPower = movePower - turnPower;
 	frontLeftDrive->move(leftPower);
