@@ -65,6 +65,8 @@ void opcontrol() {
 	// Sets the status on the LCD
 	LCD::setStatus("Operator Control");
 
+	int flywheelSpeed = 0;
+
 	while (true) {
 		// Drives the robot with the main controller
 		drive(controllerMain);
@@ -88,21 +90,34 @@ void opcontrol() {
 		indexMotor->move(util::limit127((double) controllerMain->get_digital(BUTTON_L1) * 2 * 127 - controllerMain->get_digital(BUTTON_B) * 127));
 
 		// Toggles the flywheel power when X is pressed
-		if (controllerMain->get_digital_new_press(BUTTON_X)) {
-			flywheelRunning = !flywheelRunning;
-			flywheelMotor->move(flywheelRunning * 127);
+		// if (controllerMain->get_digital_new_press(BUTTON_X)) {
+		// 	flywheelRunning = !flywheelRunning;
+		// 	flywheelMotor->move(flywheelRunning * 127);
+		// }
+
+		if (controllerMain->get_digital_new_press(BUTTON_UP)) {
+			flywheelSpeed = 127;
+		} else if (controllerMain->get_digital_new_press(BUTTON_DOWN)) {
+			flywheelSpeed = 0;
+		} else if (controllerMain->get_digital_new_press(BUTTON_RIGHT)) {
+			flywheelSpeed--;
+		} else if (controllerMain->get_digital_new_press(BUTTON_LEFT)) {
+			flywheelSpeed++;
 		}
+		flywheelMotor->move(flywheelSpeed);
+		LCD::setText(6, std::to_string(flywheelMotor->get_actual_velocity()) + " (" + std::to_string(flywheelSpeed) + ")");
+
 		// If down is pressed, reset the lift
-		if (controllerMain->get_digital_new_press(BUTTON_DOWN))
-			liftMotor->tare_position();
+		// if (controllerMain->get_digital_new_press(BUTTON_DOWN))
+		// 	liftMotor->tare_position();
 
 		// DEBUG - Trigger autonomous through the controller up button
-		if (controllerMain->get_digital_new_press(BUTTON_UP))
-			autonomous();
+		// if (controllerMain->get_digital_new_press(BUTTON_UP))
+		// 	autonomous();
 
 		// Maps the left and right buttons on the controller to the left and right buttons on the Brain LCD
-    if (controllerMain->get_digital_new_press(BUTTON_LEFT)) LCD::onLeftButton();
-    if (controllerMain->get_digital_new_press(BUTTON_RIGHT)) LCD::onRightButton();
+    // if (controllerMain->get_digital_new_press(BUTTON_LEFT)) LCD::onLeftButton();
+    // if (controllerMain->get_digital_new_press(BUTTON_RIGHT)) LCD::onRightButton();
 
 		// Prints debug information to the LCD
 		LCD::printDebugInformation();
