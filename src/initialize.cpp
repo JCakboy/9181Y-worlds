@@ -27,8 +27,10 @@ void initialize() {
 
 	// Sets the PID values
 	ports::pid = new PID();
-	ports::pid->setMovePID(0.365, 0.65, 0.45, 0.1);
+	ports::pid->setMovePID(0.365, 0.55, 0.5, 0.0);
 	ports::pid->setPivotPID(0.132, 0.285);
+
+	ports::indexMotor->set_brake_mode(BRAKE_BRAKE);
 }
 
 /**
