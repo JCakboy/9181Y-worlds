@@ -4,7 +4,7 @@
 #include "main.h"
 extern void doubleShot();
 class PID {
-  
+
   // Power restraints
   const int MAX_POWER = 120;
   const int MIN_POWER = 20;
@@ -26,8 +26,6 @@ class PID {
   void setBrakeMode();
   // Returns the power given the minimum and maximum power restraints
   double checkPower(double power);
-  // Sends the power commands to the motor
-  void powerDrive(int powerLeft, int powerRight);
 public:
   // Constructs the PID object
   PID();
@@ -42,6 +40,8 @@ public:
 
   // Ensures the robot drives straight
   void driveStraight(int power);
+  // Sends the power commands to the motor
+  void powerDrive(int powerLeft, int powerRight);
 
   // Moves the robot the given amount of inches to the desired location
   void move(double inches);
