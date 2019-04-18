@@ -7,7 +7,9 @@
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
+	// Initialize the LCD
 	LCD::initialize(ports::controllerMain, ports::controllerPartner);
+	LCD::setControllerText("Initializing...");
 
 	// Initializes the gyro with calibration
 	LCD::setStatus("Calibrating gyroscope...");
@@ -30,7 +32,11 @@ void initialize() {
 	ports::pid->setMovePID(0.365, 0.55, 0.5, 0.0);
 	ports::pid->setPivotPID(0.132, 0.285);
 
+	// Brake the index motor
 	ports::indexMotor->set_brake_mode(BRAKE_BRAKE);
+
+	// Update the LCD
+	LCD::updateScreen(true);
 }
 
 /**

@@ -107,6 +107,7 @@ void opcontrol() {
 		// Prints debug information to the LCD
 		LCD::printDebugInformation();
 
+		LCD::updateScreen();
 		pros::delay(20);
 	}
 }
