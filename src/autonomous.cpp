@@ -59,6 +59,7 @@ void visionAlign() {
 void autonomousSkills() {}
 
 void autonomousBlueFlags() {
+  // Grab the ball in the angled cap
   flywheelMotor->move(127);
   intakeMotor->move(127);
   pid->move(44.4);
@@ -73,39 +74,48 @@ void autonomousBlueFlags() {
   pros::delay(350);
   liftMotor->move_absolute(265, 127);
 
+  // Vision align to the flags and shoot
   visionAlign();
   doubleShot();
   flywheelMotor->move(0);
 
+  // Drive forward and toggle the low flag
   pid->move(10);
   pid->move(-6.25);
+
+  // Grab the ball on the flat cap
   intakeMotor->move(127);
   indexMotor->move(18);
-
   pid->pivot(-93);
   pid->resetEncoders();
-  while (frontLeftDrive->get_position() < 180) {
-    pid->driveStraight(50);
-    pros::delay(10);
-  }
+  pid->velocityMove(6.25, 50);
   flywheelMotor->move(90);
   pid->move(-8.5);
   pros::delay(750);
+
+  // Flip the flat cap
   indexMotor->move(0);
   intakeMotor->move(-100);
   pid->move(29);
+
+  // Align to the middle flags
   pid->pivot(60);
   visionAlign();
   pid->move(5.5);
+
+  // Shoot the ball
   intakeMotor->move(127);
   indexMotor->move(127);
   pros::delay(200);
   intakeMotor->move(0);
   indexMotor->move(0);
+
+  // Drive forward and toggle the low flag
   pid->move(7.25);
 }
 
 void autonomousRedFlags() {
+  // Grab the ball in the angled cap
   flywheelMotor->move(127);
   intakeMotor->move(127);
   pid->move(44.4);
@@ -120,15 +130,18 @@ void autonomousRedFlags() {
   pros::delay(350);
   liftMotor->move_absolute(265, 127);
 
+  // Vision align to the flags and shoot
   visionAlign();
   doubleShot();
   flywheelMotor->move(0);
 
+  // Drive forward and toggle the low flag
   pid->move(10);
   pid->move(-6.25);
   intakeMotor->move(127);
   indexMotor->move(18);
 
+  // Grab the ball on the flat cap
   pid->pivot(93);
   pid->resetEncoders();
   while (frontLeftDrive->get_position() < 180) {
@@ -138,19 +151,26 @@ void autonomousRedFlags() {
   flywheelMotor->move(90);
   pid->move(-8.5);
   pros::delay(750);
+
+  // Flip the flat cap
   indexMotor->move(0);
   intakeMotor->move(-100);
   pid->move(29);
+
+  // Align to the middle flags
   pid->pivot(-60);
   visionAlign();
   pid->move(6.5);
+
+  // Shoot the ball
   intakeMotor->move(127);
   indexMotor->move(127);
   pros::delay(200);
   intakeMotor->move(0);
   indexMotor->move(0);
-  pid->move(7.25);
 
+  // Drive forward and toggle the low flag
+  pid->move(7.25);
 }
 
 void autonomousBlueFar() {
@@ -158,6 +178,7 @@ void autonomousBlueFar() {
 }
 
 void autonomousRedFar() {
+  // Grab the ball in the angled cap
   intakeMotor->move(127);
   pid->move(44.4);
   pid->move(-6);
@@ -169,6 +190,7 @@ void autonomousRedFar() {
   liftMotor->move(-127);
   pros::delay(800);
 
+  // Flip the flat cap
   pid->move(8.5);
   liftMotor->move(127);
   pros::delay(1500);
