@@ -20,7 +20,7 @@ void doubleShot() {
   while (flywheelMotor->get_actual_velocity() < 580)
     pros::delay(1);
   indexMotor->move(127);
-  pros::delay(45);
+  pros::delay(80);
   indexMotor->move(0);
   pros::delay(30);
   pid->move(25);
@@ -94,7 +94,7 @@ void autonomousBlueFlags() {
   indexMotor->move(0);
   intakeMotor->move(-100);
   pid->move(29);
-  pid->pivot(48);
+  pid->pivot(60);
   visionAlign();
   pid->move(5.5);
   intakeMotor->move(127);
@@ -102,7 +102,7 @@ void autonomousBlueFlags() {
   pros::delay(200);
   intakeMotor->move(0);
   indexMotor->move(0);
-  pid->move(5.5);
+  pid->move(7.25);
 }
 
 void autonomousRedFlags() {
@@ -141,7 +141,7 @@ void autonomousRedFlags() {
   indexMotor->move(0);
   intakeMotor->move(-100);
   pid->move(29);
-  pid->pivot(-48);
+  pid->pivot(-60);
   visionAlign();
   pid->move(6.5);
   intakeMotor->move(127);
@@ -149,7 +149,7 @@ void autonomousRedFlags() {
   pros::delay(200);
   intakeMotor->move(0);
   indexMotor->move(0);
-  pid->move(5.5);
+  pid->move(7.25);
 
 }
 
@@ -160,26 +160,19 @@ void autonomousBlueFar() {
 void autonomousRedFar() {
   intakeMotor->move(127);
   pid->move(44.4);
-  pid->move(-12);
-  pid->pivot(53);
+  pid->move(-6);
+  pid->pivot(68);
 
   // Shake the lift
   liftMotor->move(127);
-  pros::delay(250);
+  pros::delay(150);
   liftMotor->move(-127);
-  pros::delay(450);
-  liftMotor->move(0);
-  pros::delay(350);
+  pros::delay(800);
 
-  pid->move(22);
-  liftMotor->move_absolute(265, 127);
-  pid->move(-22);
-  pid->pivot(-137.5);
-
-  pid->move(-19.55);
-  pid->powerDrive(-5, -5);
+  pid->move(8.5);
   liftMotor->move(127);
-  pros::delay(850);
+  pros::delay(1500);
+  pid->move(-31.25);
 
 }
 
