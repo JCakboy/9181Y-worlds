@@ -174,7 +174,32 @@ void autonomousRedFlags() {
 }
 
 void autonomousBlueFar() {
+  // Grab the ball in the angled cap
+  intakeMotor->move(127);
+  pid->move(44.4);
+  pid->move(-6);
+  pid->pivot(-68);
 
+  // Shake the lift
+  liftMotor->move(127);
+  pros::delay(150);
+  liftMotor->move(-127);
+  pros::delay(800);
+
+  // Flip the flat cap
+  pid->move(8.5);
+  liftMotor->move(127);
+  pros::delay(1500);
+  pid->move(-31.25);
+
+  // Turn and reset against the center platform
+  pid->pivot(-270);
+  pid->powerDrive(50, 50);
+  pros::delay(1250);
+
+  // Turn and face the far flags
+  pid->move(-2);
+  pid->pivot(25);
 }
 
 void autonomousRedFar() {
@@ -196,6 +221,14 @@ void autonomousRedFar() {
   pros::delay(1500);
   pid->move(-31.25);
 
+  // Turn and reset against the center platform
+  pid->pivot(270);
+  pid->powerDrive(50, 50);
+  pros::delay(1250);
+
+  // Turn and face the far flags
+  pid->move(-2);
+  pid->pivot(-25);
 }
 
 void autonomousOther(int selected) {
