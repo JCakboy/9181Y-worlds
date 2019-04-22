@@ -32,6 +32,7 @@ void doubleShot() {
 }
 
 void visionAlign() {
+  return;
   while (true) {
     if (flagVision != NULL) {
       // Prepare variables for decision
@@ -64,14 +65,15 @@ void autonomousBlueFlags() {
   intakeMotor->move(127);
   pid->move(44.4);
   pid->move(-34.4);
-  pid->pivot(89);
+  pid->pivot(91);
   intakeMotor->move(0);
+  pid->powerDrive(0, 0);
 
   // Shake the lift
   liftMotor->move(127);
   pros::delay(150);
   liftMotor->move(-127);
-  pros::delay(350);
+  pros::delay(500);
   liftMotor->move_absolute(265, 127);
 
   // Vision align to the flags and shoot
@@ -80,15 +82,15 @@ void autonomousBlueFlags() {
   flywheelMotor->move(0);
 
   // Drive forward and toggle the low flag
-  pid->move(10);
-  pid->move(-6.25);
+  pid->move(9.75);
+  pid->move(-6.85);
 
   // Grab the ball on the flat cap
   intakeMotor->move(127);
   indexMotor->move(18);
   pid->pivot(-93);
   pid->resetEncoders();
-  pid->velocityMove(6.25, 50);
+  pid->velocityMove(6.4, 50);
   flywheelMotor->move(90);
   pid->move(-8.5);
   pros::delay(750);
@@ -99,7 +101,7 @@ void autonomousBlueFlags() {
   pid->move(29);
 
   // Align to the middle flags
-  pid->pivot(60);
+  pid->pivot(58);
   visionAlign();
   pid->move(5.5);
 
@@ -122,12 +124,13 @@ void autonomousRedFlags() {
   pid->move(-35);
   pid->pivot(-90);
   intakeMotor->move(0);
+  pid->powerDrive(0, 0);
 
   // Shake the lift
   liftMotor->move(127);
   pros::delay(150);
   liftMotor->move(-127);
-  pros::delay(350);
+  pros::delay(500);
   liftMotor->move_absolute(265, 127);
 
   // Vision align to the flags and shoot
@@ -136,18 +139,15 @@ void autonomousRedFlags() {
   flywheelMotor->move(0);
 
   // Drive forward and toggle the low flag
-  pid->move(10);
-  pid->move(-6.25);
+  pid->move(9.75);
+  pid->move(-6.75);
   intakeMotor->move(127);
   indexMotor->move(18);
 
   // Grab the ball on the flat cap
   pid->pivot(93);
   pid->resetEncoders();
-  while (frontLeftDrive->get_position() < 180) {
-    pid->driveStraight(50);
-    pros::delay(10);
-  }
+  pid->velocityMove(6.4, 50);
   flywheelMotor->move(90);
   pid->move(-8.5);
   pros::delay(750);
@@ -158,7 +158,7 @@ void autonomousRedFlags() {
   pid->move(29);
 
   // Align to the middle flags
-  pid->pivot(-60);
+  pid->pivot(-58);
   visionAlign();
   pid->move(6.5);
 
@@ -177,8 +177,9 @@ void autonomousBlueFar() {
   // Grab the ball in the angled cap
   intakeMotor->move(127);
   pid->move(44.4);
-  pid->move(-6);
-  pid->pivot(-68);
+  pid->move(-4.5);
+  pid->pivot(-76);
+  pid->powerDrive(0, 0);
 
   // Shake the lift
   liftMotor->move(127);
@@ -187,27 +188,51 @@ void autonomousBlueFar() {
   pros::delay(800);
 
   // Flip the flat cap
-  pid->move(8.5);
+  pid->move(9.25);
   liftMotor->move(127);
-  pros::delay(1500);
-  pid->move(-31.25);
+  pid->powerDrive(0, 0);
+  pros::delay(1000);
+
+  // Start the flywheel
+  flywheelMotor->move(100);
+
+  // Park
+  pid->move(-40.25);
 
   // Turn and reset against the center platform
-  pid->pivot(-270);
+  pid->pivot(90);
   pid->powerDrive(50, 50);
-  pros::delay(1250);
+  pros::delay(650);
 
   // Turn and face the far flags
-  pid->move(-2);
-  pid->pivot(25);
+  pid->move(-3);
+  pid->pivot(47.8);
+  pros::delay(20);
+  pid->powerDrive(0, 0);
+
+  // Shoot the two balls
+  indexMotor->move(127);
+  pros::delay(80);
+  indexMotor->move(0);
+  flywheelMotor->move(84);
+  pros::delay(1000);
+  intakeMotor->move(127);
+  indexMotor->move(127);
+  pros::delay(750);
+  intakeMotor->move(0);
+  indexMotor->move(0);
+
+  // Power down the flywheel
+  flywheelMotor->move(0);
 }
 
 void autonomousRedFar() {
   // Grab the ball in the angled cap
   intakeMotor->move(127);
   pid->move(44.4);
-  pid->move(-6);
-  pid->pivot(68);
+  pid->move(-5);
+  pid->pivot(76);
+  pid->powerDrive(0, 0);
 
   // Shake the lift
   liftMotor->move(127);
@@ -216,19 +241,41 @@ void autonomousRedFar() {
   pros::delay(800);
 
   // Flip the flat cap
-  pid->move(8.5);
+  pid->move(8.75);
   liftMotor->move(127);
-  pros::delay(1500);
-  pid->move(-31.25);
+  pid->powerDrive(0, 0);
+  pros::delay(1000);
+
+  // Start the flywheel
+  flywheelMotor->move(100);
+
+  // Park
+  pid->move(-41.45);
 
   // Turn and reset against the center platform
-  pid->pivot(270);
+  pid->pivot(-90);
   pid->powerDrive(50, 50);
-  pros::delay(1250);
+  pros::delay(650);
 
   // Turn and face the far flags
-  pid->move(-2);
-  pid->pivot(-25);
+  pid->move(-3);
+  pid->pivot(-46.8);
+  pid->powerDrive(0, 0);
+
+  // Shoot the two balls
+  indexMotor->move(127);
+  pros::delay(80);
+  indexMotor->move(0);
+  flywheelMotor->move(83);
+  pros::delay(1000);
+  intakeMotor->move(127);
+  indexMotor->move(127);
+  pros::delay(750);
+  intakeMotor->move(0);
+  indexMotor->move(0);
+
+  // Power down the flywheel
+  flywheelMotor->move(0);
 }
 
 void autonomousOther(int selected) {

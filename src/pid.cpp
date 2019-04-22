@@ -169,7 +169,7 @@ void PID::velocityMove(double inches, double power) {
 
   pid->resetEncoders();
   // While the target has not been reached, power the drive
-  while (util::abs(frontLeftDrive->get_position()) < util::abs(inches) || util::abs(frontRightDrive->get_position()) < util::abs(inches)) {
+  while (util::abs(frontLeftDrive->get_position()) < util::abs(degrees) || util::abs(frontRightDrive->get_position()) < util::abs(degrees)) {
     driveStraight(power * util::abs(degrees) / degrees);
     LCD::printDebugInformation();
     pros::delay(20);
