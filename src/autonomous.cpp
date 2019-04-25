@@ -121,7 +121,7 @@ void autonomousRedFlags() {
   flywheelMotor->move(127);
   intakeMotor->move(127);
   pid->move(44.4);
-  pid->move(-35);
+  pid->move(-36);
   pid->pivot(-90);
   intakeMotor->move(0);
   pid->powerDrive(0, 0);
@@ -279,7 +279,10 @@ void autonomousRedFar() {
 }
 
 void autonomousOther(int selected) {
-
+  if (selectedAutonomous == -1) {
+    pid->move(40);
+  } else if (selectedAutonomous == -2)
+  pid->move(-40);
 }
 
 void autonomous() {

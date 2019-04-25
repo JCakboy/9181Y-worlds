@@ -124,7 +124,7 @@ void PID::move(double inches) {
   // Accelerates to the max speed smoothly
   if (power > 0)
     while (util::abs(power) < MAX_POWER && util::abs(power) < util::abs(kp * error)) {
-      power *= 1.42;
+      power *= 1.4;
       driveStraight(power);
       pros::delay(60);
 
@@ -133,9 +133,9 @@ void PID::move(double inches) {
     }
   else if (power < 0) {
     while (util::abs(power) < MAX_POWER && util::abs(power) < util::abs(kp * error)) {
-      power *= 1.12;
+      power *= 1.1;
       driveStraight(power);
-      pros::delay(48);
+      pros::delay(50);
 
       currentDistance = (frontRightDrive->get_position() + frontLeftDrive->get_position()) / 2;
       error = targetDistance - currentDistance;
