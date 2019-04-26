@@ -156,11 +156,18 @@ void PID::move(double inches) {
     power = (error * kp) + (derivative * kd);
     power = checkPower(power);
 
-    // Passes the requested power to the straight drive method
-    driveStraight(power);
-    LCD::printDebugInformation();
+    if(error <= 200) {
+      powerDrive(power - 3, power);
+    }
+    else {
+      // Passes the requested power to the straight drive method
+      driveStraight(power);
+      LCD::printDebugInformation();
+    }
+
     pros::delay(20);
   }
+  powerDrive(0, 0);
 }
 
 void PID::velocityMove(double inches, double power) {

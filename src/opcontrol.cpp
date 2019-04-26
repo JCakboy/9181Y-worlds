@@ -19,7 +19,7 @@ void drive(pros::Controller * controller) {
 
 		// Prepare variables for decision
 		int sigID = LCD::isAutonomousBlue() ? 1 : 2;
-		int focus = LCD::isAutonomousBlue() ? 155 : 160;
+		int focus = LCD::isAutonomousBlue() ? 150 : 150;
 		pros::vision_object_s_t sig = flagVision->get_by_sig(0, sigID);
 		int middle = util::sign(sig.x_middle_coord);
 		double error = middle - focus;
