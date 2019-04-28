@@ -113,7 +113,7 @@ void autonomousBlueFlags() {
   indexMotor->move(0);
 
   // Drive forward and toggle the low flag
-  pid->move(8);
+  pid->move(8.75);
 }
 
 void autonomousRedFlags() {
@@ -139,8 +139,8 @@ void autonomousRedFlags() {
   flywheelMotor->move(0);
 
   // Drive forward and toggle the low flag
-  pid->move(10.25);
-  pid->move(-7.35);
+  pid->move(10.55);
+  pid->move(-7.65);
   intakeMotor->move(127);
   indexMotor->move(13);
 
@@ -170,7 +170,7 @@ void autonomousRedFlags() {
   indexMotor->move(0);
 
   // Drive forward and toggle the low flag
-  pid->move(8.5);
+  pid->move(9);
 }
 
 void autonomousBlueFar() {
@@ -188,13 +188,13 @@ void autonomousBlueFar() {
   pros::delay(800);
 
   // Flip the flat cap
-  pid->move(9.25);
+  pid->move(9);
   liftMotor->move(127);
   pid->powerDrive(0, 0);
   pros::delay(1000);
 
   // Start the flywheel
-  flywheelMotor->move(100);
+  flywheelMotor->move(98);
 
   // Park
   pid->move(-38.75);
@@ -210,11 +210,14 @@ void autonomousBlueFar() {
   pros::delay(20);
   pid->powerDrive(0, 0);
 
+  // Wait until the last second to shoot the balls
+  pros::delay(1850);
+
   // Shoot the two balls
   indexMotor->move(127);
   pros::delay(80);
   indexMotor->move(0);
-  flywheelMotor->move(85);
+  flywheelMotor->move(86);
   pros::delay(1000);
   intakeMotor->move(127);
   indexMotor->move(127);
@@ -230,8 +233,8 @@ void autonomousRedFar() {
   // Grab the ball in the angled cap
   intakeMotor->move(127);
   pid->move(43.4);
-  pid->move(-4.3);
-  pid->pivot(78);
+  pid->move(-3.85);
+  pid->pivot(71.5);
   pid->powerDrive(0, 0);
 
   // Shake the lift
@@ -241,16 +244,16 @@ void autonomousRedFar() {
   pros::delay(800);
 
   // Flip the flat cap
-  pid->move(8.75);
+  pid->move(8.5);
   liftMotor->move(127);
   pid->powerDrive(0, 0);
   pros::delay(1000);
 
   // Start the flywheel
-  flywheelMotor->move(100);
+  flywheelMotor->move(97);
 
   // Park
-  pid->move(-42.25);
+  pid->move(-41.85);
 
   // Turn and reset against the center platform
   pid->pivot(-90);
@@ -259,14 +262,17 @@ void autonomousRedFar() {
 
   // Turn and face the far flags
   pid->move(-3);
-  pid->pivot(-46.8);
+  pid->pivot(-47);
   pid->powerDrive(0, 0);
+
+  // Wait until the last second to shoot the balls
+  pros::delay(1850);
 
   // Shoot the two balls
   indexMotor->move(127);
-  pros::delay(80);
+  pros::delay(78);
   indexMotor->move(0);
-  flywheelMotor->move(84);
+  flywheelMotor->move_voltage(84.75/127*12000);
   pros::delay(1000);
   intakeMotor->move(127);
   indexMotor->move(127);

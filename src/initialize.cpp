@@ -32,8 +32,9 @@ void initialize() {
 	ports::pid->setMovePID(0.365, 0.55, 0.5, 0.5);
 	ports::pid->setPivotPID(0.132, 0.285);
 
-	// Brake the index motor
+	// Brake the index and intake motor
 	ports::indexMotor->set_brake_mode(BRAKE_BRAKE);
+	ports::intakeMotor->set_brake_mode(BRAKE_BRAKE);
 
 	// Update the LCD
 	LCD::updateScreen(true);
